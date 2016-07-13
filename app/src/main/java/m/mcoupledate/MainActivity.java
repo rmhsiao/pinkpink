@@ -38,7 +38,7 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity implements
         View.OnClickListener,
         GoogleApiClient.OnConnectionFailedListener  {
-
+//Iverson
     private CallbackManager fbCallbackManager;
     private GoogleApiClient mGoogleApiClient;
 

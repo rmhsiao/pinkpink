@@ -34,7 +34,7 @@ import com.google.android.gms.common.api.Scope;
 import org.json.JSONObject;
 
 import java.util.Arrays;
-
+//test0713
 public class MainActivity extends AppCompatActivity implements
         View.OnClickListener,
         GoogleApiClient.OnConnectionFailedListener  {

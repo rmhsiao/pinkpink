@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements
 //Iverson
     private CallbackManager fbCallbackManager;
     private GoogleApiClient mGoogleApiClient;
-
+//11111111
     private AQuery mAQuery;
 
     private String conAPI = "http://140.117.71.216/pinkCon/pinkCon.php";

@@ -10,9 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-import com.androidquery.AQuery;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -34,18 +31,13 @@ import com.google.android.gms.common.api.Scope;
 import org.json.JSONObject;
 
 import java.util.Arrays;
-//test0713
+
 public class MainActivity extends AppCompatActivity implements
         View.OnClickListener,
         GoogleApiClient.OnConnectionFailedListener  {
-//Iverson
+
     private CallbackManager fbCallbackManager;
     private GoogleApiClient mGoogleApiClient;
-//11111112
-    private AQuery mAQuery;
-
-    private String conAPI = "http://140.117.71.216/pinkCon/pinkCon.php";
-    RequestQueue mQueue;
 
     private final int REQ_FB_LOGIN = 64206;
     private final int REQ_GPLUS_LOGIN = 0;
@@ -59,13 +51,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
-
-        mQueue = Volley.newRequestQueue(this);
-
-        mAQuery = new AQuery(this);
 
         mDialog = (TextView) findViewById(R.id.mDialog);
         fbLogin = (LoginButton) findViewById(R.id.fbLogin);
@@ -79,8 +66,6 @@ public class MainActivity extends AppCompatActivity implements
         initFBLoginBtn();
         initGPlusLoginBtn();
 
-
-
     }
 
     @Override
@@ -93,9 +78,6 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.gplusLogout:
                 gplusLogout();
                 break;
-//            case R.id.forsql:
-////                initUserProfile();
-//                break;
         }
 
     }
@@ -120,48 +102,10 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    protected void initUserProfile(final String id, final String name, final String gender, final String birthday, final String relationDate)
-    {
-
-        PinkCon.exec("INSERT INTO `member` VALUES ("+id+", '"+name+"', '"+gender+"', '"+birthday+"', '"+relationDate+"')", mQueue, conAPI);
-
-//        mDialog.setText("INSERT INTO `member` VALUES ("+id+", '"+name+"', '"+gender+"', '"+birthday+"', '"+relationDate+"')");
-//        final String sql = "INSERT INTO `member` VALUES ("+id+", '"+name+"', "+gender+", '"+birthday+"', '"+relationDate+"'";
-//
-//        mDialog.setText(sql);
-//
-//        StringRequest stringRequest = new StringRequest(Request.Method.POST, conAPI,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-////                        mDialog.setText(response);
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        mDialog.setText(error.getMessage()+"-------------"+error.toString());
-//                    }
-//                }){
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Map<String, String> map = new HashMap<String, String>();
-//
-//                map.put("exec", sql);
-//
-//                return map;
-//            }
-//        };
-//
-//        mQueue.add(stringRequest);
-
-    }
-
-
     protected void initFBLoginBtn()
     {
         fbCallbackManager = CallbackManager.Factory.create();
-        fbLogin.setReadPermissions(Arrays.asList("user_birthday"));
+        fbLogin.setReadPermissions(Arrays.asList("email"));
 
         fbLogin.registerCallback(fbCallbackManager, new FacebookCallback<LoginResult>() {
 
@@ -176,22 +120,13 @@ public class MainActivity extends AppCompatActivity implements
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
 
-                                String gender;
-                                if (object.optString("gender").compareTo("female")==0) gender = "1";
-                                else gender = "0";
-
-                                String bd = object.optString("birthday");
-                                bd = bd.substring(6, 10)+"-"+bd.substring(0,2)+"-"+bd.substring(3,5);
-
-                                initUserProfile(object.optString("id"), object.optString("name"), gender, bd, "");
-
-//                                mDialog.setText(object.optString("name"));
+                                mDialog.setText(object.optString("id") + " " + object.optString("name"));
                             }
                         }
                 );
 
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id, name, gender, birthday");
+                parameters.putString("fields", "id, name");
                 request.setParameters(parameters);
                 request.executeAsync();
             }
@@ -236,27 +171,9 @@ public class MainActivity extends AppCompatActivity implements
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-//            try {
-//                Plus.PeopleApi.load(mGoogleApiClient, acct.getId()).setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
-//                    @Override
-//                    public void onResult(@NonNull People.LoadPeopleResult loadPeopleResult) {
-//                        Person me = loadPeopleResult.getPersonBuffer().get(0);
-//
-//                        mDialog.setText(me.getId()+"---"+me.getDisplayName()+"---"+Integer.toString(me.getGender())+"---"+me.getBirthday());
-//                        initUserProfile(me.getId(), me.getDisplayName(), Integer.toString(me.getGender()), me.getBirthday(), "");
-//
-//                    }
-//                });
-//            }catch(Exception e){
-//
-//
-//                mDialog.setText(e.toString()+"----"+e.getMessage());
-//            }
-            // sdasdsadsadas
-            mDialog.setText(acct.getPhotoUrl().toString());
+            mDialog.setText(acct.getId() + " " + acct.getDisplayName());
 //            mAQuery.id(profilePic).image(acct.getPhotoUrl().toString(), true, true, 0, android.R.drawable.ic_menu_gallery);
-            initUserProfile(acct.getId(), acct.getDisplayName(), "", null, null);
-//            mDialog.setText(acct.getPhotoUrl().toString());
+
         } else {
             // Signed out, show unauthenticated UI.
             mDialog.setText("login fail");
@@ -280,7 +197,6 @@ public class MainActivity extends AppCompatActivity implements
             mDialog.setText("gplus out");
         } catch (Exception e) {
             mDialog.setText(e.getMessage());
-            //123
         }
     }
 

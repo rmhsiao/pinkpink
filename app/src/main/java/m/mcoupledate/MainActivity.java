@@ -34,7 +34,7 @@ import com.google.android.gms.common.api.Scope;
 import org.json.JSONObject;
 
 import java.util.Arrays;
-//test0713
+//test0713mmmmmmmmmmmmmm
 public class MainActivity extends AppCompatActivity implements
         View.OnClickListener,
         GoogleApiClient.OnConnectionFailedListener  {
@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements
 //
 //                mDialog.setText(e.toString()+"----"+e.getMessage());
 //            }
-            // sdasdsadsadas
+
             mDialog.setText(acct.getPhotoUrl().toString());
 //            mAQuery.id(profilePic).image(acct.getPhotoUrl().toString(), true, true, 0, android.R.drawable.ic_menu_gallery);
             initUserProfile(acct.getId(), acct.getDisplayName(), "", null, null);
@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements
             mDialog.setText("gplus out");
         } catch (Exception e) {
             mDialog.setText(e.getMessage());
-            //123
+            //123maomaomao
         }
     }
 

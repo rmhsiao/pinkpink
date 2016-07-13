@@ -252,6 +252,7 @@ public class MainActivity extends AppCompatActivity implements
 //
 //                mDialog.setText(e.toString()+"----"+e.getMessage());
 //            }
+            // sdasdsadsadas
             mDialog.setText(acct.getPhotoUrl().toString());
 //            mAQuery.id(profilePic).image(acct.getPhotoUrl().toString(), true, true, 0, android.R.drawable.ic_menu_gallery);
             initUserProfile(acct.getId(), acct.getDisplayName(), "", null, null);

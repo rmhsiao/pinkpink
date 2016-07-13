@@ -280,6 +280,7 @@ public class MainActivity extends AppCompatActivity implements
             mDialog.setText("gplus out");
         } catch (Exception e) {
             mDialog.setText(e.getMessage());
+            //123
         }
     }
 

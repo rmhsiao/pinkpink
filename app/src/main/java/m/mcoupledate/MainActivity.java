@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements
     private SignInButton gplusLogin;
     private Button gplusLogout;
 
+
+    //  初始化頁面和變數設定
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,8 +81,6 @@ public class MainActivity extends AppCompatActivity implements
         initFBLoginBtn();
         initGPlusLoginBtn();
 
-
-
     }
 
     @Override
@@ -93,15 +93,13 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.gplusLogout:
                 gplusLogout();
                 break;
-//            case R.id.forsql:
-////                initUserProfile();
-//                break;
         }
 
     }
 
 
 
+    //  當FB或GooglePlus傳回結果時在此操作
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -120,44 +118,14 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
+    //  將使用者資訊存入資料庫
     protected void initUserProfile(final String id, final String name, final String gender, final String birthday, final String relationDate)
     {
-
-        PinkCon.exec("INSERT INTO `member` VALUES ("+id+", '"+name+"', '"+gender+"', '"+birthday+"', '"+relationDate+"')", mQueue, conAPI);
-
-//        mDialog.setText("INSERT INTO `member` VALUES ("+id+", '"+name+"', '"+gender+"', '"+birthday+"', '"+relationDate+"')");
-//        final String sql = "INSERT INTO `member` VALUES ("+id+", '"+name+"', "+gender+", '"+birthday+"', '"+relationDate+"'";
-//
-//        mDialog.setText(sql);
-//
-//        StringRequest stringRequest = new StringRequest(Request.Method.POST, conAPI,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-////                        mDialog.setText(response);
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        mDialog.setText(error.getMessage()+"-------------"+error.toString());
-//                    }
-//                }){
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Map<String, String> map = new HashMap<String, String>();
-//
-//                map.put("exec", sql);
-//
-//                return map;
-//            }
-//        };
-//
-//        mQueue.add(stringRequest);
-
+        PinkCon.exec("INSERT INTO `member` VALUES ('"+id+"', '"+name+"', '"+gender+"', '"+birthday+"', '"+relationDate+"')", mQueue, conAPI);
     }
 
 
+    //  初始化FB登入按鈕
     protected void initFBLoginBtn()
     {
         fbCallbackManager = CallbackManager.Factory.create();
@@ -167,8 +135,6 @@ public class MainActivity extends AppCompatActivity implements
 
             @Override
             public void onSuccess(LoginResult loginResult) {
-
-//                AccessToken accessToken = loginResult.getAccessToken();
 
                 GraphRequest request = GraphRequest.newMeRequest(
                         loginResult.getAccessToken(),
@@ -185,7 +151,10 @@ public class MainActivity extends AppCompatActivity implements
 
                                 initUserProfile(object.optString("id"), object.optString("name"), gender, bd, "");
 
-//                                mDialog.setText(object.optString("name"));
+
+                                /**
+                                                                *           FB 登入成功後在此處理內容
+                                                                */
                             }
                         }
                 );
@@ -209,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+    //  初始化GooglePlus登入按鈕
     protected void initGPlusLoginBtn()
     {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -226,11 +196,13 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+    //  GooglePlus登入
     private void gplusLogin() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, REQ_GPLUS_LOGIN);
     }
 
+    //  GooglePlus處理登入結果
     private void handleSignInResult(GoogleSignInResult result) {
 
         if (result.isSuccess()) {
@@ -255,6 +227,13 @@ public class MainActivity extends AppCompatActivity implements
             mDialog.setText(acct.getPhotoUrl().toString());
 //            mAQuery.id(profilePic).image(acct.getPhotoUrl().toString(), true, true, 0, android.R.drawable.ic_menu_gallery);
             initUserProfile(acct.getId(), acct.getDisplayName(), "", null, null);
+
+
+            /**
+                        *       GooglePlus 登入成功後在此處理內容
+                        * */
+
+
 //            mDialog.setText(acct.getPhotoUrl().toString());
         } else {
             // Signed out, show unauthenticated UI.
@@ -263,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    @Override
+    // GooglePlus 登入失敗處理
     public void onConnectionFailed(ConnectionResult connectionResult) {
         try {
             connectionResult.startResolutionForResult(this, REQ_GPLUS_LOGIN);
@@ -273,6 +252,7 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    //  GooglePlus 登出
     private void gplusLogout() {
         try {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient);

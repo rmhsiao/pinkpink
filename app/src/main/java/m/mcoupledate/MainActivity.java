@@ -10,7 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.androidquery.AQuery;
 import com.facebook.CallbackManager;
@@ -34,6 +39,8 @@ import com.google.android.gms.common.api.Scope;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements
         View.OnClickListener,
@@ -44,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private AQuery mAQuery;
 
-    private String conAPI = "http://140.117.71.216/pinkCon/pinkCon.php";
+    private String conAPI = "http://140.117.71.216/pinkCon/";
     RequestQueue mQueue;
 
     private final int REQ_FB_LOGIN = 64206;
@@ -82,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements
         initGPlusLoginBtn();
 
     }
+
 
     @Override
     public void onClick(View view)
@@ -121,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements
     //  將使用者資訊存入資料庫
     protected void initUserProfile(final String id, final String name, final String gender, final String birthday, final String relationDate)
     {
-        PinkCon.exec("INSERT INTO `member` VALUES ('"+id+"', '"+name+"', '"+gender+"', '"+birthday+"', '"+relationDate+"')", mQueue, conAPI);
+        PinkCon.exec("INSERT INTO `member` VALUES ('"+id+"', '"+name+"', '"+gender+"', '"+birthday+"', '"+relationDate+"')", mQueue, conAPI+"pinkCon.php");
     }
 
 
@@ -129,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements
     protected void initFBLoginBtn()
     {
         fbCallbackManager = CallbackManager.Factory.create();
-        fbLogin.setReadPermissions(Arrays.asList("user_birthday"));
+        fbLogin.setReadPermissions(Arrays.asList("user_birthday, user_likes, user_tagged_places"));
 
         fbLogin.registerCallback(fbCallbackManager, new FacebookCallback<LoginResult>() {
 
@@ -140,29 +148,44 @@ public class MainActivity extends AppCompatActivity implements
                         loginResult.getAccessToken(),
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
-                            public void onCompleted(JSONObject object, GraphResponse response) {
+                            public void onCompleted(final JSONObject object, GraphResponse response) {
 
-                                String gender;
-                                if (object.optString("gender").compareTo("female")==0) gender = "1";
-                                else gender = "0";
+                                String id = object.optString("id");
 
-                                String bd = object.optString("birthday");
-                                bd = bd.substring(6, 10)+"-"+bd.substring(0,2)+"-"+bd.substring(3,5);
+                                StringRequest stringRequest = new StringRequest(Request.Method.POST, conAPI+"fbLogin.php",
+                                        new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                mDialog.setText(response);
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                mDialog.setText(error.getMessage()+"-----"+error.toString());
+                                            }
+                                        }){
+                                    @Override
+                                    protected Map<String, String> getParams() throws AuthFailureError {
+                                        Map<String, String> map = new HashMap<String, String>();
 
-                                initUserProfile(object.optString("id"), object.optString("name"), gender, bd, "");
+                                        map.put("fbUser", object.toString());
 
+                                        return map;
+                                    }
+                                };
 
-                                /**
-                                                                *           FB 登入成功後在此處理內容
-                                                                */
+                                mQueue.add(stringRequest);
+
                             }
-                        }
-                );
+                        });
 
-                Bundle parameters = new Bundle();
-                parameters.putString("fields", "id, name, gender, birthday");
-                request.setParameters(parameters);
+                Bundle params = new Bundle();
+                params.putString("fields", "id,name,gender,birthday,likes{id,name,about,description,location{latitude,longitude,street},phone,public_transit,emails,website,category},tagged_places{place{id,name,about,description,location{latitude,longitude,street},phone,public_transit,emails,website,category}}");
+                params.putString("locale", "zh_TW");
+                request.setParameters(params);
                 request.executeAsync();
+
             }
 
             @Override
@@ -256,6 +279,10 @@ public class MainActivity extends AppCompatActivity implements
     private void gplusLogout() {
         try {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+
+            /**
+                         *          登出後在此處理
+                         */
             mDialog.setText("gplus out");
         } catch (Exception e) {
             mDialog.setText(e.getMessage());

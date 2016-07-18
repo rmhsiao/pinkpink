@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity implements
     private SignInButton gplusLogin;
     private Button gplusLogout;
 
+    //存使用者ID
+    private static String id;
+
 
     //  初始化頁面和變數設定
     @Override
@@ -150,7 +153,8 @@ public class MainActivity extends AppCompatActivity implements
                             @Override
                             public void onCompleted(final JSONObject object, GraphResponse response) {
 
-                                String id = object.optString("id");
+                                //使用者ID
+                                id = object.optString("id");
 
                                 StringRequest stringRequest = new StringRequest(Request.Method.POST, conAPI+"fbLogin.php",
                                         new Response.Listener<String>() {
@@ -176,7 +180,10 @@ public class MainActivity extends AppCompatActivity implements
                                 };
 
                                 mQueue.add(stringRequest);
-
+                                // 設定從這個活動跳至 home 的活動
+                                Intent intent = new Intent(MainActivity.this, Home.class);
+                                // 開始跳頁
+                                startActivity(intent);
                             }
                         });
 
@@ -253,8 +260,8 @@ public class MainActivity extends AppCompatActivity implements
 
 
             /**
-                        *       GooglePlus 登入成功後在此處理內容
-                        * */
+             *       GooglePlus 登入成功後在此處理內容
+             * */
 
 
 //            mDialog.setText(acct.getPhotoUrl().toString());
@@ -281,12 +288,16 @@ public class MainActivity extends AppCompatActivity implements
             Auth.GoogleSignInApi.signOut(mGoogleApiClient);
 
             /**
-                         *          登出後在此處理
-                         */
+             *          登出後在此處理
+             */
             mDialog.setText("gplus out");
         } catch (Exception e) {
             mDialog.setText(e.getMessage());
         }
     }
 
+    //給其他頁面要求使用者id
+    public static String getUserId(){
+        return id;
+    }
 }

@@ -3,7 +3,7 @@ package m.mcoupledate;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -31,7 +31,7 @@ public class Home extends AppCompatActivity {
     private int count;
 
     // 宣告 LinearLayout 物件(為了動態新增)
-    private LinearLayout homeLayout;
+    private RelativeLayout homeLayout;
     //private TextView tsetDialog;
     //此TextView是靜態新增的
     private TextView totalDaysDialog;
@@ -45,7 +45,7 @@ public class Home extends AppCompatActivity {
         totalDays();
 
         // 取得 LinearLayout 物件(為了動態新增)
-        homeLayout = (LinearLayout)findViewById(R.id.viewObj);
+        homeLayout = (RelativeLayout)findViewById(R.id.viewObj);
         //動態
         count = 0;//要抓取第幾筆資料
         //while(true) {

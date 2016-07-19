@@ -9,14 +9,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="m.mcoupledate.MainActivity">
 
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/fbLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_above="@+id/gplusLogin"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="68dp" />
+    <!--<com.facebook.login.widget.LoginButton-->
+        <!--android:id="@+id/fbLogin"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:layout_above="@+id/gplusLogin"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginBottom="68dp" />-->
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/gplusLogin"
@@ -56,6 +56,23 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="83dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fbLogin"
+        android:src="@drawable/com_facebook_button_icon_blue"
+        android:contentDescription="FB log in" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fbLogout"
+        android:layout_below="@+id/fbLogin"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="350dp"
+        android:src="@drawable/com_facebook_tooltip_blue_xout" />
 
 
 </RelativeLayout>

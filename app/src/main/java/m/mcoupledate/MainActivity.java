@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,8 +25,8 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -58,10 +59,10 @@ public class MainActivity extends AppCompatActivity implements
     private final int REQ_GPLUS_LOGIN = 0;
 
     private TextView mDialog;
-    private LoginButton fbLogin;
     private ImageView profilePic;
     private SignInButton gplusLogin;
     private Button gplusLogout;
+    private ImageButton fbLogin, fbLogout;
 
     //存使用者ID
     private static String id;
@@ -80,13 +81,16 @@ public class MainActivity extends AppCompatActivity implements
         mAQuery = new AQuery(this);
 
         mDialog = (TextView) findViewById(R.id.mDialog);
-        fbLogin = (LoginButton) findViewById(R.id.fbLogin);
         profilePic = (ImageView) findViewById(R.id.profilePic);
         gplusLogin = (SignInButton) findViewById(R.id.gplusLogin);
         gplusLogout = (Button) findViewById(R.id.gplusLogout);
+        fbLogin = (ImageButton) findViewById(R.id.fbLogin);
+        fbLogout = (ImageButton) findViewById(R.id.fbLogout);
 
         gplusLogin.setOnClickListener(this);
         gplusLogout.setOnClickListener(this);
+        fbLogin.setOnClickListener(this);
+        fbLogout.setOnClickListener(this);
 
         initFBLoginBtn();
         initGPlusLoginBtn();
@@ -103,6 +107,12 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             case R.id.gplusLogout:
                 gplusLogout();
+                break;
+            case R.id.fbLogin:
+                fbLogin();
+                break;
+            case R.id.fbLogout:
+                fbLogout();
                 break;
         }
 
@@ -140,9 +150,9 @@ public class MainActivity extends AppCompatActivity implements
     protected void initFBLoginBtn()
     {
         fbCallbackManager = CallbackManager.Factory.create();
-        fbLogin.setReadPermissions(Arrays.asList("user_birthday, user_likes, user_tagged_places"));
+//        fbLogin.setReadPermissions(Arrays.asList("user_birthday, user_likes, user_tagged_places"));
 
-        fbLogin.registerCallback(fbCallbackManager, new FacebookCallback<LoginResult>() {
+        LoginManager.getInstance().registerCallback(fbCallbackManager, new FacebookCallback<LoginResult>() {
 
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -206,6 +216,29 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
+    }
+
+
+    protected void fbLogin()
+    {
+        LoginManager.getInstance().logInWithReadPermissions(MainActivity.this, Arrays.asList("user_birthday, user_likes, user_tagged_places"));
+
+        /*
+                            登入後結果
+                            在 initFBLoginBtn() 的 onSuccess中處理
+
+         */
+    }
+
+
+    protected void fbLogout()
+    {
+        LoginManager.getInstance().logOut();
+
+        /*
+                            在此處理F登出後結果
+
+         */
     }
 
     //  初始化GooglePlus登入按鈕

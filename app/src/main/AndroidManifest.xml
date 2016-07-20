@@ -30,6 +30,7 @@
         android:value="@string/facebook_app_id" />
 
         <activity android:name=".Home"></activity>
+        <activity android:name=".ModifyMemorialDay"></activity>
     </application>
 
 </manifest>

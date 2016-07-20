@@ -75,13 +75,13 @@ public class Home extends AppCompatActivity {
                 }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
+                        Map<String, String> map = new HashMap<String, String>();
 
-                map.put("User", id);
+                        map.put("User", id);
 
-                return map;
-            }
-        };
+                        return map;
+                    }
+                };
 
         mRequestQueue.add(mStringRequest);
     }

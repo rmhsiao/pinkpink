@@ -2,4 +2,17 @@
     <string name="app_name">mcoupledate</string>
     <string name="facebook_app_id">152132441862956</string>
     <string name="login">登入</string>
+    <string name="title_activity_home_page">HomePageActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="page_memberData">設定會員資料</string>
+    <string name="page_memorialDay">設定紀念日</string>
+    <string name="page_myViewpoint">管理我的景點</string>
+    <string name="page_myTravle">管理我的行程</string>
+    <string name="page_travleEdit">編輯行程</string>
+    <string name="page_logout">登出</string>
 </resources>

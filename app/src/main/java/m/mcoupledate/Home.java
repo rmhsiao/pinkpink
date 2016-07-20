@@ -26,7 +26,7 @@ public class Home extends AppCompatActivity {
     private RequestQueue mRequestQueue;
     private StringRequest mStringRequest;
 
-    private String id = MainActivity.getUserId();
+    private String id = "1763438647274913";
 
     private int count;
 

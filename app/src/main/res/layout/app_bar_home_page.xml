@@ -63,10 +63,10 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:fillViewport="false"
+            android:layout_marginTop="130dp"
             android:layout_below="@+id/days"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="51dp">
+            android:layout_alignParentStart="true">
 
             <LinearLayout
                 android:id="@+id/mday_in_sv"

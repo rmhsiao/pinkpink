@@ -36,7 +36,7 @@ public class HomePageActivity extends AppCompatActivity
     private RequestQueue mRequestQueue;
     private StringRequest mStringRequest;
 
-    private String id = "1763438647274913";
+    private String id = MainActivity.getUserId();
 
     private int count;
 

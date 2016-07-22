@@ -7,7 +7,9 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="m.mcoupledate.ModifyMemorialDay">
+    tools:context="m.mcoupledate.ModifyMemorialDay"
+    android:clickable="true"
+    android:orientation="vertical">
 
 
     <CalendarView
@@ -17,12 +19,20 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
-    <TextView
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="submit"
+        android:id="@+id/modifyName"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="請選擇日期"
-        android:id="@+id/textView"
-        android:layout_above="@+id/modifyMemoryDay"
-        android:layout_centerHorizontal="true" />
+        android:id="@+id/aaa"
+        android:text="北七"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="55dp" />
 </RelativeLayout>

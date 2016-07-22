@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
-
+        //偵測使用者
         mQueue = Volley.newRequestQueue(this);
 
         mAQuery = new AQuery(this);
@@ -95,10 +95,7 @@ public class MainActivity extends AppCompatActivity implements
         initFBLoginBtn();
         initGPlusLoginBtn();
 
-        // 設定從這個活動跳至 home 的活動
-        Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
-        // 開始跳頁
-        startActivity(intent);
+
 
     }
 
@@ -175,13 +172,14 @@ public class MainActivity extends AppCompatActivity implements
                                         new Response.Listener<String>() {
                                             @Override
                                             public void onResponse(String response) {
-                                                mDialog.setText(response);
+                                                //跳轉與建sqlite
+                                                checkSQLiteTableAndGoHome();
                                             }
                                         },
                                         new Response.ErrorListener() {
                                             @Override
                                             public void onErrorResponse(VolleyError error) {
-                                                mDialog.setText(error.getMessage()+"-----"+error.toString());
+                                                //mDialog.setText(error.getMessage()+"-----"+error.toString());
                                             }
                                         }){
                                     @Override
@@ -193,12 +191,7 @@ public class MainActivity extends AppCompatActivity implements
                                         return map;
                                     }
                                 };
-
                                 mQueue.add(stringRequest);
-                                // 設定從這個活動跳至 home 的活動
-                                Intent intent = new Intent(MainActivity.this, Home.class);
-                                // 開始跳頁
-                                startActivity(intent);
                             }
                         });
 
@@ -296,10 +289,9 @@ public class MainActivity extends AppCompatActivity implements
 //            mAQuery.id(profilePic).image(acct.getPhotoUrl().toString(), true, true, 0, android.R.drawable.ic_menu_gallery);
             initUserProfile(acct.getId(), acct.getDisplayName(), "", null, null);
 
-
-            /**
-             *       GooglePlus 登入成功後在此處理內容
-             * */
+            //GooglePlus 登入成功後在此處理內容
+            //跳轉與建sqlite
+            checkSQLiteTableAndGoHome();
 
 
 //            mDialog.setText(acct.getPhotoUrl().toString());
@@ -337,5 +329,16 @@ public class MainActivity extends AppCompatActivity implements
     //給其他頁面要求使用者id
     public static String getUserId(){
         return id;
+    }
+
+    public void checkSQLiteTableAndGoHome(){
+        //判斷SQLite有沒有存在資料庫
+        //if 沒有
+        //創建並從資料庫匯入
+
+        // 設定從這個活動跳至 home 的活動
+        Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
+        // 開始跳頁
+        startActivity(intent);
     }
 }

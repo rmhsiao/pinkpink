@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,8 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -38,12 +36,12 @@ public class HomePageActivity extends AppCompatActivity
     private RequestQueue mRequestQueue;
     private StringRequest mStringRequest;
 
-    private String id = MainActivity.getUserId();;
+    private String id = "1763438647274913";
 
     private int count;
 
     // 宣告 LinearLayout 物件(為了動態新增)
-    private RelativeLayout homeLayout;
+    private LinearLayout homeLayout;
     //private TextView tsetDialog;
     //此TextView是靜態新增的
     private TextView totalDaysDialog;
@@ -52,18 +50,11 @@ public class HomePageActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.app_bar_home_page);
+        setContentView(R.layout.activity_home_page);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -79,7 +70,7 @@ public class HomePageActivity extends AppCompatActivity
         totalDays();
 
         // 取得 LinearLayout 物件(為了動態新增)
-        homeLayout = (RelativeLayout)findViewById(R.id.viewObj);
+        homeLayout = (LinearLayout)findViewById(R.id.mday_in_sv);
         //動態
         count = 0;//要抓取第幾筆資料
         //while(true) {
@@ -196,10 +187,7 @@ public class HomePageActivity extends AppCompatActivity
             // 開始跳頁
             startActivity(intent);
         } else if (id == R.id.nav_memorialDay) {
-            // 設定從這個活動跳至 設定紀念日 的活動
-            Intent intent = new Intent(HomePageActivity.this, ModifyMemorialDay.class);
-            // 開始跳頁
-            startActivity(intent);
+
         } else if (id == R.id.nav_myViewpoint) {
 
         } else if (id == R.id.nav_myTravle) {

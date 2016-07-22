@@ -44,7 +44,7 @@
             android:text="test"
             android:textSize="60sp"
             android:id="@+id/totalDaysDialog"
-            android:layout_marginTop="156dp"
+            android:layout_marginTop="142dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
         <TextView
@@ -53,21 +53,23 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Days"
             android:textSize="20sp"
+            android:id="@+id/days"
             android:layout_below="@+id/totalDaysDialog"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/textView2" />
+            android:layout_centerHorizontal="true" />
 
         <ScrollView
-            android:id="@+id/sv"
+            android:id="@+id/scrollview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:layout_marginTop="93dp"
-            android:layout_below="@+id/textView2"
-            android:layout_centerHorizontal="true">
+            android:fillViewport="false"
+            android:layout_below="@+id/days"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="51dp">
 
             <LinearLayout
-                android:id="@+id/ll_in_sv"
+                android:id="@+id/mday_in_sv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"

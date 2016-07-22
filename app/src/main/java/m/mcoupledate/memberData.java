@@ -80,7 +80,7 @@ public class memberData extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        //123
         if (id == R.id.nav_memberData) {
             // 設定從這個活動跳至 home 的活動
             Intent intent = new Intent(memberData.this, memberData.class);

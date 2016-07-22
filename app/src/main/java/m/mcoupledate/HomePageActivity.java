@@ -2,6 +2,7 @@ package m.mcoupledate;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -12,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,12 +43,16 @@ public class HomePageActivity extends AppCompatActivity
 
     private int count;
 
+    private String data[];
+
     // 宣告 LinearLayout 物件(為了動態新增)
     private LinearLayout homeLayout;
     //private TextView tsetDialog;
     //此TextView是靜態新增的
     private TextView totalDaysDialog;
 
+    private ViewGroup mLayout;
+    private int img[] = {R.drawable.ic_menu_camera,R.drawable.ic_menu_gallery,R.drawable.ic_menu_manage,R.drawable.ic_menu_send};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,19 +77,49 @@ public class HomePageActivity extends AppCompatActivity
         totalDays();
 
         // 取得 LinearLayout 物件(為了動態新增)
-        homeLayout = (LinearLayout)findViewById(R.id.mday_in_sv);
+        homeLayout = (LinearLayout)findViewById(R.id.activity_service_select);
         //動態
         count = 0;//要抓取第幾筆資料
         //while(true) {
-        for(int i = 0;i<4;i++){
+ /*       for(int i = 0;i<4;i++){
             TextView tsetDialog = new TextView(this);
+            tsetDialog.setTextSize(22);
             tsetDialog.setText("失敗" + count);
             homeLayout.addView(tsetDialog);
             printMemorialDays(tsetDialog);
+         } */
+        setUpViews();
+    }
+    //布局
+    private void setUpViews() {
+        setContentView(R.layout.activity_home_page);
+        setTitle(R.string.mday);
+        //       showBackwardView(R.string.button_backward, true);
+        mLayout = (ViewGroup) findViewById(R.id.activity_service_select);
+        final String[] mSelfSelect = getResources().getStringArray(R.array.languages);
+        // 需要布局的行数
+        final int rowCount = mSelfSelect.length;
+        for (int i = 0; i < 4; i++) {
+            final LinearLayout linearLayout = new LinearLayout(this);
+            View.inflate(this, R.layout.mday_data, linearLayout);
+            final View view = linearLayout.getChildAt(0);
+            view.setTag(i + 1);
+ //           view.setOnClickListener(this);
+
+            Drawable drawable = getResources().getDrawable(img[i]);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+
+            final TextView mTextView = (TextView) linearLayout.findViewById(R.id.tv_select_item);
+            mTextView.setCompoundDrawables(drawable, null, null, null);//设置TextView的drawableleft
+            mTextView.setCompoundDrawablePadding(10);//设置图片和text之间的间距
+            mTextView.setText(mSelfSelect[i]);
+            // 添加到屏幕布局
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            mLayout.addView(linearLayout, layoutParams);
         }
     }
 
-    //算總共交往多久
+        //算總共交往多久
     public void totalDays() {
         mContext = this;
         mRequestQueue = Volley.newRequestQueue(mContext);
@@ -187,6 +224,10 @@ public class HomePageActivity extends AppCompatActivity
             // 開始跳頁
             startActivity(intent);
         } else if (id == R.id.nav_memorialDay) {
+            // 設定從這個活動跳至 home 的活動
+            Intent intent = new Intent(HomePageActivity.this, ModifyMemorialDay.class);
+            // 開始跳頁
+            startActivity(intent);
 
         } else if (id == R.id.nav_myViewpoint) {
 

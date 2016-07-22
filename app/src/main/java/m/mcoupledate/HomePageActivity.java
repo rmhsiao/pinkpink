@@ -52,7 +52,7 @@ public class HomePageActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_page);
+        setContentView(R.layout.app_bar_home_page);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -196,7 +196,10 @@ public class HomePageActivity extends AppCompatActivity
             // 開始跳頁
             startActivity(intent);
         } else if (id == R.id.nav_memorialDay) {
-
+            // 設定從這個活動跳至 設定紀念日 的活動
+            Intent intent = new Intent(HomePageActivity.this, ModifyMemorialDay.class);
+            // 開始跳頁
+            startActivity(intent);
         } else if (id == R.id.nav_myViewpoint) {
 
         } else if (id == R.id.nav_myTravle) {

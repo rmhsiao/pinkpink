@@ -23,14 +23,6 @@
 
     <include layout="@layout/content_home_page" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
-
     //內容
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -44,14 +36,48 @@
         tools:context="m.mcoupledate.Home"
         android:orientation="vertical">
 
+        //天數
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="test"
+            android:textSize="60sp"
             android:id="@+id/totalDaysDialog"
-            android:layout_centerVertical="true"
+            android:layout_marginTop="156dp"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Days"
+            android:textSize="20sp"
+            android:layout_below="@+id/totalDaysDialog"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/textView2" />
+
+        <ScrollView
+            android:id="@+id/sv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="93dp"
+            android:layout_below="@+id/textView2"
+            android:layout_centerHorizontal="true">
+
+            <LinearLayout
+                android:id="@+id/ll_in_sv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:text="Days"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+
+            </LinearLayout>
+
+        </ScrollView>
 
     </RelativeLayout>
 

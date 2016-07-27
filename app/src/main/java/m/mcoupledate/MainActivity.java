@@ -1,7 +1,10 @@
 package m.mcoupledate;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -35,6 +38,7 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -63,6 +67,12 @@ public class MainActivity extends AppCompatActivity implements
     //存使用者ID
     private static String id;
 
+    SQLiteDatabase db = null;
+
+    private Context mContext;
+    private RequestQueue mRequestQueue;
+    private StringRequest mStringRequest;
+
 
     //  初始化頁面和變數設定
     @Override
@@ -89,10 +99,6 @@ public class MainActivity extends AppCompatActivity implements
 
         initFBLoginBtn();
         initGPlusLoginBtn();
-
-        // 開始跳頁
-        //Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
-        //startActivity(intent);
 
     }
 
@@ -330,15 +336,105 @@ public class MainActivity extends AppCompatActivity implements
     public static String getUserId(){
         return id;
     }
-
+    //判斷SQLite有沒有存在資料庫
     public void checkSQLiteTableAndGoHome(){
-        //判斷SQLite有沒有存在資料庫
-        //if 沒有
-        //創建並從資料庫匯入
+
+        db = openOrCreateDatabase("userdb.db", MODE_PRIVATE, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM sqlite_master WHERE type='table' AND name='member'", null);
+        if(cursor.getCount() == 0){
+            //沒有member資料表 要創建
+            db.execSQL("CREATE TABLE member(_id varchar(255) primary key , name varchar(255), gender INTEGER, birthday varchar(255), relationship_date varchar(255))");
+            db.close();
+            //從資料庫匯入
+            insertDataFromMariadbToSQLite(1);
+        }
+        db = openOrCreateDatabase("userdb.db", MODE_PRIVATE, null);
+        Cursor cursor2 = db.rawQuery("SELECT * FROM sqlite_master WHERE type='table' AND name='memorialday'", null);
+        if(cursor2.getCount() == 0){
+            //沒有memorialday資料表 要創建
+            db.execSQL("CREATE TABLE memorialday( eventName varchar(255) primary key, eventDate varchar(255))");
+            db.close();
+            //從資料庫匯入
+            insertDataFromMariadbToSQLite(2);
+        }
+
 
         // 設定從這個活動跳至 home 的活動
         Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
         // 開始跳頁
         startActivity(intent);
     }
+    public void insertDataFromMariadbToSQLite(int choose){
+        mContext = this;
+        mRequestQueue = Volley.newRequestQueue(mContext);
+        switch (choose){
+            case 1://拿會員資料
+                mStringRequest = new StringRequest(Request.Method.POST, conAPI+"memberData.php",
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONArray jArr = new JSONArray(response);
+                                    JSONObject o;
+                                    for (int a=0; a<jArr.length(); ++a) {
+                                        o = jArr.getJSONObject(a);
+                                        db = openOrCreateDatabase("userdb.db", MODE_PRIVATE, null);
+                                        db.execSQL("INSERT INTO member values('"+id+"', '"+o.getString("name")+"', '"+o.getInt("gender")+"', '"+o.getString("birthday")+"', '"+o.getString("relationship_date")+"')");
+                                        db.close();
+                                    }
+                                }
+                                catch (Exception e) {
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                            }
+                        }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> map = new HashMap<String, String>();
+                        map.put("User", id);
+                        return map;
+                    }
+                };
+                mRequestQueue.add(mStringRequest);
+                break;
+            case 2:
+                mStringRequest = new StringRequest(Request.Method.POST, conAPI+"memorialDays.php",
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONArray jArr = new JSONArray(response);
+                                    JSONObject o;
+                                    for (int a=0; a<jArr.length(); a++) {
+                                        o = jArr.getJSONObject(a);
+                                        db = openOrCreateDatabase("userdb.db", MODE_PRIVATE, null);
+                                        db.execSQL("INSERT INTO memorialday values('"+o.getString("eventName")+"',  '"+o.getString("eventDate")+"')");
+                                        db.close();
+                                    }
+                                }
+                                catch (Exception e) {
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                            }
+                        }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> map = new HashMap<String, String>();
+                        map.put("User", id);
+                        return map;
+                    }
+                };
+                mRequestQueue.add(mStringRequest);
+                break;
+        }
+        }
+
 }

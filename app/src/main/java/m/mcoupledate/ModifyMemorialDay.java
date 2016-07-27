@@ -36,7 +36,7 @@ public class ModifyMemorialDay extends AppCompatActivity {
                 else
                     date = year + "0" + (month+1) + "-" + dayOfMonth;
                 //開啟資料庫
-                SQLiteDatabase db = openOrCreateDatabase("db.db", MODE_PRIVATE, null);
+                SQLiteDatabase db = openOrCreateDatabase("userdb.db", MODE_PRIVATE, null);
                 //從sqlite撈資料印出
                 eventName.setText("北七");
 

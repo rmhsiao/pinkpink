@@ -2,6 +2,7 @@ package m.mcoupledate;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -39,12 +41,10 @@ public class HomePageActivity extends AppCompatActivity
     private StringRequest mStringRequest;
 
     private String id = MainActivity.getUserId();
-    //private String id = "1763438647274913";
-
 
     private int count;
 
-
+    private String data[];
 
     // 宣告 LinearLayout 物件(為了動態新增)
     private LinearLayout homeLayout;
@@ -52,6 +52,8 @@ public class HomePageActivity extends AppCompatActivity
     //此TextView是靜態新增的
     private TextView totalDaysDialog;
 
+    private ViewGroup mLayout;
+    private int img[] = {R.drawable.ic_menu_camera,R.drawable.ic_menu_gallery,R.drawable.ic_menu_manage,R.drawable.ic_menu_send};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

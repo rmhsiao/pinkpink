@@ -6,6 +6,7 @@
         <item>php</item>
         <item>xml</item>
         <item>html</item>
+        <item>html</item>
     </string-array>
 
     <integer-array name="reminder_methods_values" translatable="false">

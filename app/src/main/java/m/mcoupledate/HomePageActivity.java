@@ -2,7 +2,6 @@ package m.mcoupledate;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -11,10 +10,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,10 +39,12 @@ public class HomePageActivity extends AppCompatActivity
     private StringRequest mStringRequest;
 
     private String id = MainActivity.getUserId();
+    //private String id = "1763438647274913";
+
 
     private int count;
 
-    private String data[];
+
 
     // 宣告 LinearLayout 物件(為了動態新增)
     private LinearLayout homeLayout;
@@ -51,8 +52,6 @@ public class HomePageActivity extends AppCompatActivity
     //此TextView是靜態新增的
     private TextView totalDaysDialog;
 
-    private ViewGroup mLayout;
-    private int img[] = {R.drawable.ic_menu_camera,R.drawable.ic_menu_gallery,R.drawable.ic_menu_manage,R.drawable.ic_menu_send};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,53 +72,37 @@ public class HomePageActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         //靜態
-        totalDaysDialog = (TextView)findViewById(R.id.totalDaysDialog);
+        totalDaysDialog = (TextView) findViewById(R.id.totalDaysDialog);
         totalDays();
 
         // 取得 LinearLayout 物件(為了動態新增)
-        homeLayout = (LinearLayout)findViewById(R.id.activity_service_select);
+      //  homeLayout = (LinearLayout) findViewById(R.id.activity_service_select);
         //動態
-        count = 0;//要抓取第幾筆資料
+     //   count = 0;//要抓取第幾筆資料
         //while(true) {
- /*       for(int i = 0;i<4;i++){
+   /*     for(int i = 0;i<4;i++){
             TextView tsetDialog = new TextView(this);
             tsetDialog.setTextSize(22);
             tsetDialog.setText("失敗" + count);
             homeLayout.addView(tsetDialog);
             printMemorialDays(tsetDialog);
-         } */
-        setUpViews();
-    }
-    //布局
-    private void setUpViews() {
-        setContentView(R.layout.activity_home_page);
-        setTitle(R.string.mday);
-        //       showBackwardView(R.string.button_backward, true);
-        mLayout = (ViewGroup) findViewById(R.id.activity_service_select);
-        final String[] mSelfSelect = getResources().getStringArray(R.array.languages);
-        // 需要布局的行数
-        final int rowCount = mSelfSelect.length;
-        for (int i = 0; i < 4; i++) {
-            final LinearLayout linearLayout = new LinearLayout(this);
-            View.inflate(this, R.layout.mday_data, linearLayout);
-            final View view = linearLayout.getChildAt(0);
-            view.setTag(i + 1);
- //           view.setOnClickListener(this);
-
-            Drawable drawable = getResources().getDrawable(img[i]);
-            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-
-            final TextView mTextView = (TextView) linearLayout.findViewById(R.id.tv_select_item);
-            mTextView.setCompoundDrawables(drawable, null, null, null);//设置TextView的drawableleft
-            mTextView.setCompoundDrawablePadding(10);//设置图片和text之间的间距
-            mTextView.setText(mSelfSelect[i]);
-            // 添加到屏幕布局
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            mLayout.addView(linearLayout, layoutParams);
-        }
+         }*/
+        init();
     }
 
-        //算總共交往多久
+    //新增單筆紀念日資料
+    public void init()
+    {
+            LinearLayout linearLayout1=(LinearLayout)findViewById(R.id.activity_service_select);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            View view =LayoutInflater.from(this).inflate(R.layout.mday_data, null);
+            view.setLayoutParams(lp);
+            TextView tv1 = (TextView) view.findViewById(R.id.mContext);
+            tv1.setText("紀念日");
+            linearLayout1.addView(view);
+    }
+
+    //算總共交往多久
     public void totalDays() {
         mContext = this;
         mRequestQueue = Volley.newRequestQueue(mContext);

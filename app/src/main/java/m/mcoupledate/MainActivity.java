@@ -336,7 +336,10 @@ public class MainActivity extends AppCompatActivity implements
     public static String getUserId(){
         return id;
     }
-    //判斷SQLite有沒有存在資料庫
+
+    /**
+     * 判斷SQLite有沒有存在資料庫
+     */
     public void checkSQLiteTableAndGoHome(){
 
         db = openOrCreateDatabase("userdb.db", MODE_PRIVATE, null);
@@ -364,11 +367,16 @@ public class MainActivity extends AppCompatActivity implements
         // 開始跳頁
         startActivity(intent);
     }
+
+    /**
+     * 從資料撈資料並存入對應SQLite table
+     * @param choose 要哪種資料 1.會員 2.紀念日 3.收藏景點 4.收藏行程
+     */
     public void insertDataFromMariadbToSQLite(int choose){
         mContext = this;
         mRequestQueue = Volley.newRequestQueue(mContext);
         switch (choose){
-            case 1://拿會員資料
+            case 1://取得會員 資料並存入sqlite
                 mStringRequest = new StringRequest(Request.Method.POST, conAPI+"memberData.php",
                         new Response.Listener<String>() {
                             @Override
@@ -401,7 +409,7 @@ public class MainActivity extends AppCompatActivity implements
                 };
                 mRequestQueue.add(mStringRequest);
                 break;
-            case 2:
+            case 2://取得紀念日資料並存入sqlite
                 mStringRequest = new StringRequest(Request.Method.POST, conAPI+"memorialDays.php",
                         new Response.Listener<String>() {
                             @Override
@@ -436,5 +444,4 @@ public class MainActivity extends AppCompatActivity implements
                 break;
         }
         }
-
 }

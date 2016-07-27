@@ -59,6 +59,7 @@
             android:layout_below="@+id/totalDaysDialog"
             android:layout_centerHorizontal="true" />
 
+        //紀念日
         <ScrollView
             android:id="@+id/scrollview"
             android:layout_width="match_parent"

@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +32,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 
@@ -59,10 +57,8 @@ public class MainActivity extends AppCompatActivity implements
     private final int REQ_GPLUS_LOGIN = 0;
 
     private TextView mDialog;
-    private ImageView profilePic;
-    private SignInButton gplusLogin;
+    private ImageButton fbLogin, fbLogout, gplusLogin;
     private Button gplusLogout;
-    private ImageButton fbLogin, fbLogout;
 
     //存使用者ID
     private static String id;
@@ -81,8 +77,7 @@ public class MainActivity extends AppCompatActivity implements
         mAQuery = new AQuery(this);
 
         mDialog = (TextView) findViewById(R.id.mDialog);
-        profilePic = (ImageView) findViewById(R.id.profilePic);
-        gplusLogin = (SignInButton) findViewById(R.id.gplusLogin);
+        gplusLogin = (ImageButton) findViewById(R.id.gplusLogin);
         gplusLogout = (Button) findViewById(R.id.gplusLogout);
         fbLogin = (ImageButton) findViewById(R.id.fbLogin);
         fbLogout = (ImageButton) findViewById(R.id.fbLogout);
@@ -246,24 +241,25 @@ public class MainActivity extends AppCompatActivity implements
                 .build();
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
+//                .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        gplusLogin.setSize(SignInButton.SIZE_STANDARD);
-        gplusLogin.setScopes(gso.getScopeArray());
+//        gplusLogin.setSize(SignInButton.SIZE_STANDARD);
+//        gplusLogin.setScopes(gso.getScopeArray());
 
     }
 
     //  GooglePlus登入
-    private void gplusLogin() {
+    private void gplusLogin()
+    {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, REQ_GPLUS_LOGIN);
     }
 
     //  GooglePlus處理登入結果
-    private void handleSignInResult(GoogleSignInResult result) {
-
+    private void handleSignInResult(GoogleSignInResult result)
+    {
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
@@ -282,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements
 //
 //
 //                mDialog.setText(e.toString()+"----"+e.getMessage());
-//            }
+//            }[
             mDialog.setText(acct.getPhotoUrl().toString());
 //            mAQuery.id(profilePic).image(acct.getPhotoUrl().toString(), true, true, 0, android.R.drawable.ic_menu_gallery);
             initUserProfile(acct.getId(), acct.getDisplayName(), "", null, null);
@@ -295,14 +291,16 @@ public class MainActivity extends AppCompatActivity implements
 //            mDialog.setText(acct.getPhotoUrl().toString());
         } else {
             // Signed out, show unauthenticated UI.
-            mDialog.setText("login fail");
+//            mDialog.setText();
 //            mDialog.setText();
         }
     }
 
     // GooglePlus 登入失敗處理
+    @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         try {
+            mDialog.setText("try");
             connectionResult.startResolutionForResult(this, REQ_GPLUS_LOGIN);
         } catch (IntentSender.SendIntentException e) {
             e.printStackTrace();

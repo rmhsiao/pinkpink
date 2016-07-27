@@ -19,7 +19,7 @@
         <!--android:layout_marginBottom="68dp" />-->
 
     <com.google.android.gms.common.SignInButton
-        android:id="@+id/gplusLogin"
+        android:id="@+id/gplusLoginO"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"
@@ -75,15 +75,26 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="48dp" />
 
-  <!--  <ImageButton
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/gplusLogin"
-        android:src="@drawable/gp"
-        android:contentDescription="FB log in"
-        android:layout_above="@+id/gplusLogout"
-        android:layout_alignLeft="@+id/fbLogin"
-        android:layout_alignStart="@+id/fbLogin" /> -->
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/fbLogout"
+        android:layout_alignStart="@+id/fbLogout"
+        android:layout_toLeftOf="@+id/gplusLogout"
+        android:layout_toStartOf="@+id/gplusLogout"
+        android:src="@drawable/common_plus_signin_btn_icon_dark_normal" />
+
+    <!--  <ImageButton
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:id="@+id/gplusLogin"
+          android:src="@drawable/gp"
+          android:contentDescription="FB log in"
+          android:layout_above="@+id/gplusLogout"
+          android:layout_alignLeft="@+id/fbLogin"
+          android:layout_alignStart="@+id/fbLogin" /> -->
 
 
 </RelativeLayout>

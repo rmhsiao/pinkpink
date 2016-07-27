@@ -70,11 +70,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/fbLogout"
-        android:layout_below="@+id/fbLogin"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="350dp"
-        android:src="@drawable/com_facebook_tooltip_blue_xout" />
+        android:src="@drawable/okk"
+        android:layout_above="@+id/mDialog"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="48dp" />
 
   <!--  <ImageButton
         android:layout_width="wrap_content"

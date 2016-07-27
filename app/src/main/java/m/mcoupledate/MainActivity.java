@@ -213,12 +213,12 @@ public class MainActivity extends AppCompatActivity implements
         });
 
     }
-    nWithReadPermissions(MainActivity.this, Arrays.asList("user_birthday, user_likes, user_tagged_places"));
+
 
 
     protected void fbLogin()
     {
-        LoginManager.getInstance().logI
+        LoginManager.getInstance().logInWithReadPermissions(MainActivity.this, Arrays.asList("user_birthday, user_likes, user_tagged_places"));
         /*
                             登入後結果
                             在 initFBLoginBtn() 的 onSuccess中處理

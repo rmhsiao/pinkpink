@@ -2,6 +2,8 @@ package m.mcoupledate;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -27,6 +29,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +51,7 @@ public class HomePageActivity extends AppCompatActivity
     private StringRequest mStringRequest;
 
     private String id = MainActivity.getUserId();
-
+    private SQLiteDatabase db = null;
     private int count;
 
     private String data[];
@@ -89,80 +99,94 @@ public class HomePageActivity extends AppCompatActivity
             homeLayout.addView(tsetDialog);
             printMemorialDays(tsetDialog);
          }*/
-        init();
+        printMemorialDays();
     }
 
     //新增單筆紀念日資料
-    public void init()
+    public void init(String name, String date, int diff)
     {
             LinearLayout linearLayout1=(LinearLayout)findViewById(R.id.activity_service_select);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             View view =LayoutInflater.from(this).inflate(R.layout.mday_data, null);
             view.setLayoutParams(lp);
             TextView tv1 = (TextView) view.findViewById(R.id.mContext);
-            tv1.setText("紀念日");
+            tv1.setText(name);
             linearLayout1.addView(view);
     }
 
-    //算總共交往多久
+    //算總共交往多久(新版)
     public void totalDays() {
-        mContext = this;
-        mRequestQueue = Volley.newRequestQueue(mContext);
-        mStringRequest = new StringRequest(Request.Method.POST, conAPI+"totalDays.php",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        totalDaysDialog.setText(response);//php echo出現的地方
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        totalDaysDialog.setText(error.getMessage()+"-----"+error.toString());
-                    }
-                }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-
-                map.put("User", id);
-
-                return map;
+        db = openOrCreateDatabase("userdb.db", MODE_PRIVATE, null);
+        Cursor cursor = db.rawQuery("select relationship_date from member",null);
+        cursor.moveToFirst();
+        do{
+            long margin = 0;
+            String theDay = cursor.getString(0);
+            if(theDay == "0000-00-00"){
+                totalDaysDialog.setText("您還沒有新增資料喔^^");
+                break;
             }
-        };
+            else{
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-        mRequestQueue.add(mStringRequest);
+                Date d1 = null;
+                try{
+                    d1 = formatter.parse(theDay);
+                }
+                catch (ParseException e){
+                    e.printStackTrace();
+                }
+                Date d2 = new Date();
+                long diff = d2.getTime() - d1.getTime();
+                String diffstr = "" + diff/(1000*60*60*24);
+                totalDaysDialog.setText(diffstr);
+            }
+        }while (cursor.moveToNext());
+        db.close();
     }
-    //印出紀念日們
-    public void printMemorialDays(final TextView view) {
-        mContext = this;
-        mRequestQueue = Volley.newRequestQueue(mContext);
-        mStringRequest = new StringRequest(Request.Method.POST, conAPI+"printMemorialDays.php",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        view.setText(response);//php echo出現的地方
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        view.setText(error.getMessage()+"-----"+error.toString());
-                    }
-                }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
+    //印出紀念日們(新版)
+    public void printMemorialDays() {
+        db = openOrCreateDatabase("userdb.db", MODE_PRIVATE, null);
+        Cursor cursor = db.rawQuery("select * from memorialday",null);
+        cursor.moveToFirst();
+        do{
+            String name = cursor.getString(1);
+            String theDay = cursor.getString(2);
+            DateFormat stringFormatter = new SimpleDateFormat("yyyy-MM-dd");//要轉成String的
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");//要轉成Date的
 
-                map.put("User", id);
-                String strcount = "";
-                strcount += count;
-                map.put("Count",  strcount);
-                count += 1;
-                return map;
+            Date now = Calendar.getInstance().getTime();//取得現在時間
+            String today = stringFormatter.format(now);//將取得的時間轉成String
+
+            //String to Date 紀念日時間
+            Date d1 = null;
+            try{
+                String d1_str = today.substring(0, 4) + "-" + theDay.substring(5, 7) + "-" + theDay.substring(8, 10);
+                d1 = dateFormatter.parse(d1_str);
             }
-        };
-        mRequestQueue.add(mStringRequest);
+            catch (ParseException e){
+                e.printStackTrace();
+            }
+            //String to Date 現在時間
+            Date d2 = null;
+            try{
+                d2 = dateFormatter.parse(today);
+            }
+            catch (ParseException e){
+                e.printStackTrace();
+            }
+            //把過的忽略
+            if(Integer.valueOf(theDay.substring(5, 7)) > Integer.valueOf(today.substring(5, 7))){//月大於 日就不用比了
+                long diff = d2.getTime() - d1.getTime();
+                String diffstr = "" + diff/(1000*60*60*24);
+                init(name, theDay, Math.abs(Integer.valueOf(diffstr)));
+            }
+            else if(Integer.valueOf(theDay.substring(5, 7)) == Integer.valueOf(today.substring(5, 7)) && Integer.valueOf(theDay.substring(8, 10)) >= Integer.valueOf(today.substring(8, 10))){//月等於 比日
+                long diff = d2.getTime() - d1.getTime();
+                String diffstr = "" + diff/(1000*60*60*24);
+                init(name, theDay, Math.abs(Integer.valueOf(diffstr)));
+            }
+        }while(cursor.moveToNext());
     }
 
     @Override

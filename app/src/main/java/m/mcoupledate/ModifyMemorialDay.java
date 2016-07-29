@@ -1,5 +1,6 @@
 package m.mcoupledate;
 
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,13 +33,23 @@ public class ModifyMemorialDay extends AppCompatActivity {
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 String date;
                 if(month + 1 < 10)
-                    date = year + "-0" + (month+1) + "-" + dayOfMonth;
+                    date = "0" + (month + 1) + "-" + dayOfMonth;
                 else
-                    date = year + "0" + (month+1) + "-" + dayOfMonth;
+                    date = (month + 1) + "-" + dayOfMonth;
                 //開啟資料庫
                 SQLiteDatabase db = openOrCreateDatabase("userdb.db", MODE_PRIVATE, null);
                 //從sqlite撈資料印出
-                eventName.setText("北七");
+                Cursor cursor = db.rawQuery("SELECT eventName From memorialday WHERE eventDate LIKE '%"+date+"'",null);
+                if(cursor.getCount() != 0){
+                    cursor.moveToFirst();
+                    do{
+                        //動態新增
+                        eventName.setText(cursor.getString(0));
+
+                    }while(cursor.moveToNext());
+                }
+                else
+                    eventName.setText("");
 
                 //Toast.makeText(getApplicationContext(), date, Toast.LENGTH_SHORT).show();
             }
@@ -59,6 +70,9 @@ public class ModifyMemorialDay extends AppCompatActivity {
 原本是紀念日的藥不同顏色
 輕按標示原本紀念日
 久按修改紀念日
+
+把自己生日也顯示
+
 */
 /*待做
 印出原本是紀念日的日子為其他顏色

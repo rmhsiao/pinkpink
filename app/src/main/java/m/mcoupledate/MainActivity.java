@@ -355,7 +355,7 @@ public class MainActivity extends AppCompatActivity implements
         Cursor cursor2 = db.rawQuery("SELECT * FROM sqlite_master WHERE type='table' AND name='memorialday'", null);
         if(cursor2.getCount() == 0){
             //沒有memorialday資料表 要創建
-            db.execSQL("CREATE TABLE memorialday( eventName varchar(255) primary key, eventDate varchar(255))");
+            db.execSQL("CREATE TABLE memorialday(_id INTEGER primary key autoincrement, eventName varchar(255) , eventDate varchar(255))");
             db.close();
             //從資料庫匯入
             insertDataFromMariadbToSQLite(2);
@@ -420,7 +420,7 @@ public class MainActivity extends AppCompatActivity implements
                                     for (int a=0; a<jArr.length(); a++) {
                                         o = jArr.getJSONObject(a);
                                         db = openOrCreateDatabase("userdb.db", MODE_PRIVATE, null);
-                                        db.execSQL("INSERT INTO memorialday values('"+o.getString("eventName")+"',  '"+o.getString("eventDate")+"')");
+                                        db.execSQL("INSERT INTO memorialday(eventName, eventDate) values('"+o.getString("eventName")+"',  '"+o.getString("eventDate")+"')");
                                         db.close();
                                     }
                                 }

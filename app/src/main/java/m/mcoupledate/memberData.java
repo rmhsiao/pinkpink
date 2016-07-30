@@ -14,7 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class memberData extends AppCompatActivity
+public class MemberData extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
@@ -83,7 +83,7 @@ public class memberData extends AppCompatActivity
         //123
         if (id == R.id.nav_memberData) {
             // 設定從這個活動跳至 home 的活動
-            Intent intent = new Intent(memberData.this, memberData.class);
+            Intent intent = new Intent(MemberData.this, MemberData.class);
             // 開始跳頁
             startActivity(intent);
         } else if (id == R.id.nav_memorialDay) {

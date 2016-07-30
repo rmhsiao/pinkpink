@@ -253,7 +253,7 @@ public class HomePageActivity extends AppCompatActivity
 
         if (id == R.id.nav_memberData) {
             // 設定從這個活動跳至 home 的活動
-            Intent intent = new Intent(HomePageActivity.this, memberData.class);
+            Intent intent = new Intent(HomePageActivity.this, MemberData.class);
             // 開始跳頁
             startActivity(intent);
         } else if (id == R.id.nav_memorialDay) {

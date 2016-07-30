@@ -35,7 +35,7 @@
             android:label="@string/title_activity_home_page"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".memberData"
+            android:name=".MemberData"
             android:label="@string/title_activity_member_data"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

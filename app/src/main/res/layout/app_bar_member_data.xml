@@ -46,8 +46,124 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="test"
+            android:text="Name"
+            android:id="@+id/name"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="128dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Gender"
+            android:id="@+id/gender"
             android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Birthday"
+            android:id="@+id/birthday"
+            android:layout_below="@+id/gender"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="69dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="交往紀念日"
+            android:id="@+id/reletionship"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="64dp" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText"
+            android:layout_alignTop="@+id/name"
+            android:layout_toRightOf="@+id/reletionship"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText2"
+            android:layout_alignTop="@+id/gender"
+            android:layout_alignRight="@+id/editText"
+            android:layout_alignEnd="@+id/editText"
+            android:layout_alignLeft="@+id/editText"
+            android:layout_alignStart="@+id/editText" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/b_day"
+            android:layout_alignTop="@+id/b_month"
+            android:layout_toRightOf="@+id/b_month"
+            android:layout_toEndOf="@+id/b_month"
+            android:layout_alignBottom="@+id/b_month" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/b_month"
+            android:layout_alignTop="@+id/b_year"
+            android:layout_toRightOf="@+id/b_year"
+            android:layout_toEndOf="@+id/b_year"
+            android:layout_alignBottom="@+id/b_year" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/b_year"
+            android:layout_alignTop="@+id/birthday"
+            android:layout_alignLeft="@+id/editText2"
+            android:layout_alignStart="@+id/editText2"
+            android:layout_alignBottom="@+id/birthday" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/r_year"
+            android:layout_toRightOf="@+id/reletionship"
+            android:layout_toEndOf="@+id/reletionship"
+            android:layout_alignTop="@+id/reletionship"
+            android:layout_alignBottom="@+id/reletionship" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/r_month"
+            android:layout_alignTop="@+id/r_year"
+            android:layout_toRightOf="@+id/r_year"
+            android:layout_toEndOf="@+id/r_year"
+            android:layout_alignBottom="@+id/r_year" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/r_day"
+            android:layout_alignTop="@+id/r_month"
+            android:layout_toRightOf="@+id/r_month"
+            android:layout_toEndOf="@+id/r_month"
+            android:layout_alignBottom="@+id/r_month" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="確定修改"
+            android:id="@+id/button"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
 
     </RelativeLayout>

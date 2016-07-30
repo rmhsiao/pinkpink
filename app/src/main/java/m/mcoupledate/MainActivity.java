@@ -79,9 +79,7 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //離線測試
-        Intent intent = new Intent(MainActivity.this, MemberData.class);
-        startActivity(intent);
+
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);

@@ -1,6 +1,8 @@
 package m.mcoupledate;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.text.DateFormat;
@@ -24,7 +28,14 @@ import java.util.Date;
 
 public class MemberData extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    //name editview
+    private EditText editText;
+    //傳送些改的button
+    private Button button;
     //下拉式選單
+    private  Spinner gender;
+    String[] gen = new String[]{"男", "女"};
     private Spinner b_year;
     ArrayList<Integer>byear = new ArrayList<>();
     private Spinner b_month;
@@ -38,6 +49,7 @@ public class MemberData extends AppCompatActivity
     private Spinner r_day;
     ArrayList<Integer>rday = new ArrayList<>();
 
+    SQLiteDatabase db = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +76,12 @@ public class MemberData extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //name editview
+        editText = (EditText)findViewById(R.id.editText);
+        //傳送些改的button
+        button = (Button)findViewById(R.id.button);
         //下拉式選單
+        gender = (Spinner)findViewById(R.id.gender);
         b_year = (Spinner)findViewById(R.id.b_year);
         b_month = (Spinner)findViewById(R.id.b_month);
         b_day = (Spinner)findViewById(R.id.b_day);
@@ -88,6 +105,7 @@ public class MemberData extends AppCompatActivity
             rday.add(i);
         }
         //建立ArrayAdapter
+        ArrayAdapter<String> adapter_gender = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, gen);
         ArrayAdapter<Integer> adapter_b_year = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, byear);
         ArrayAdapter<Integer> adapter_b_month = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, bmonth);
         ArrayAdapter<Integer> adapter_b_day = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, bday);
@@ -95,6 +113,7 @@ public class MemberData extends AppCompatActivity
         ArrayAdapter<Integer> adapter_r_month = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, rmonth);
         ArrayAdapter<Integer> adapter_r_day = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, rday);
         //ArrayAdapter顯示格式
+        adapter_gender.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         adapter_b_year.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         adapter_b_month.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         adapter_b_day.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -102,12 +121,74 @@ public class MemberData extends AppCompatActivity
         adapter_r_month.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         adapter_r_day.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //設定Spinner的資料來源
+        gender.setAdapter(adapter_gender);
         b_year.setAdapter(adapter_b_year);
         b_month.setAdapter(adapter_b_month);
         b_day.setAdapter(adapter_b_day);
         r_year.setAdapter(adapter_r_year);
         r_month.setAdapter(adapter_r_month);
         r_day.setAdapter(adapter_r_day);
+        //從SQLite取資料印在頁面上
+        db = openOrCreateDatabase("userdb.db", MODE_PRIVATE, null);//打開資料庫
+        Cursor cursor = db.rawQuery("SELECT name, gender, birthday, relationship_date from member", null);
+        cursor.moveToFirst();
+        do{
+            editText.setText(cursor.getString(0));
+            if(cursor.getInt(1) == 0)
+                gender.setSelection(0);//起始設定在男生
+            else
+                gender.setSelection(1);//起始設定在女生
+            if(cursor.getString(2) != null){//不為空值才設定起始年月日 => 生日
+                b_year.setSelection(byear.indexOf(cursor.getString(2).substring(0, 4)));
+                b_month.setSelection(bmonth.indexOf(cursor.getString(2).substring(5, 7)));
+                b_day.setSelection(bday.indexOf(cursor.getString(2).substring(8, 10)));
+            }
+            if(cursor.getString(3) != null){//不為空值才設定起始年月日 => 交往日
+                r_year.setSelection(ryear.indexOf(cursor.getString(3).substring(0, 4)));
+                r_month.setSelection(rmonth.indexOf(cursor.getString(3).substring(5, 7)));
+                r_day.setSelection(rday.indexOf(cursor.getString(3).substring(8, 10)));
+            }
+        }while(cursor.moveToNext());
+        db.close();
+        //傳送修改的button 監測器
+        button.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                String nameStr = editText.getText().toString();
+                String genderStr = gender.getSelectedItem().toString();
+                int genderInt = 0;
+                if(genderStr == "男")
+                    genderInt = 0;
+                else
+                    genderInt = 1;
+                String birthdayStr = "";
+                if((Integer)b_month.getSelectedItem() < 10 && (Integer)b_day.getSelectedItem() < 10)
+                    birthdayStr = b_year.getSelectedItem().toString() + "-0" + b_month.getSelectedItem().toString() + "-0" +b_day.getSelectedItem().toString();
+                else if((Integer)b_month.getSelectedItem() < 10 && (Integer)b_day.getSelectedItem() >= 10)
+                    birthdayStr = b_year.getSelectedItem().toString() + "-0" + b_month.getSelectedItem().toString() + "-" +b_day.getSelectedItem().toString();
+                else if((Integer)b_month.getSelectedItem() >= 10 && (Integer)b_day.getSelectedItem() < 10)
+                    birthdayStr = b_year.getSelectedItem().toString() + "-" + b_month.getSelectedItem().toString() + "-0" +b_day.getSelectedItem().toString();
+                else
+                    birthdayStr = b_year.getSelectedItem().toString() + "-" + b_month.getSelectedItem().toString() + "-" +b_day.getSelectedItem().toString();
+                String relationshipstr = "";
+                if((Integer)r_month.getSelectedItem() < 10 && (Integer)r_day.getSelectedItem() < 10)
+                    relationshipstr = r_year.getSelectedItem().toString() + "-0" + r_month.getSelectedItem().toString() + "-0" +r_day.getSelectedItem().toString();
+                else if((Integer)r_month.getSelectedItem() < 10 && (Integer)r_day.getSelectedItem() >= 10)
+                    relationshipstr = r_year.getSelectedItem().toString() + "-0" + r_month.getSelectedItem().toString() + "-" +r_day.getSelectedItem().toString();
+                else if((Integer)r_month.getSelectedItem() >= 10 && (Integer)r_day.getSelectedItem() < 10)
+                    relationshipstr = r_year.getSelectedItem().toString() + "-" + r_month.getSelectedItem().toString() + "-0" +r_day.getSelectedItem().toString();
+                else
+                    relationshipstr = r_year.getSelectedItem().toString() + "-" + r_month.getSelectedItem().toString() + "-" +r_day.getSelectedItem().toString();
+                //傳資料給SQLite MariaDB
+                db = openOrCreateDatabase("userdb.db", MODE_PRIVATE, null);//打開資料庫
+                Cursor cursor = db.rawQuery("", null);
+                db.close();
+                insertIntoMariaDB();//MariaDB
+                //跳回首頁
+                Intent intent = new Intent(MemberData.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -169,4 +250,15 @@ public class MemberData extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    /**
+     * 將修改的資料放入MariaDB
+     */
+    public void insertIntoMariaDB(){
+
+    }
 }
+//第一次登入從直接跳來這裡
+//從sqlite撈出正確資料
+//印出原本的會員資料
+//修改完存入SQLite與MariaDB(button)

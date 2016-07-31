@@ -361,10 +361,10 @@ public class MainActivity extends AppCompatActivity implements
             insertDataFromMariadbToSQLite(2);
         }
 
-
-        // 設定從這個活動跳至 home 的活動
+        /*if(第一次近來或會員資料空缺)
+        Intent intent = new Intent(MainActivity.this, MemberData.class);
+        startActivity(intent);*/
         Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
-        // 開始跳頁
         startActivity(intent);
     }
 

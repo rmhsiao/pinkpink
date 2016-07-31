@@ -1,5 +1,6 @@
 package m.mcoupledate;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,15 +21,32 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MemberData extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    //連結MariaDB
+    private String conAPI = "http://140.117.71.216/pinkCon/";
+    RequestQueue mQueue;
+    private Context mContext;
+    private RequestQueue mRequestQueue;
+    private StringRequest mStringRequest;
 
+    private String id = MainActivity.getUserId();
     //name editview
     private EditText editText;
     //傳送些改的button
@@ -139,14 +157,14 @@ public class MemberData extends AppCompatActivity
             else
                 gender.setSelection(1);//起始設定在女生
             if(cursor.getString(2) != null){//不為空值才設定起始年月日 => 生日
-                b_year.setSelection(byear.indexOf(cursor.getString(2).substring(0, 4)));
-                b_month.setSelection(bmonth.indexOf(cursor.getString(2).substring(5, 7)));
-                b_day.setSelection(bday.indexOf(cursor.getString(2).substring(8, 10)));
+                b_year.setSelection(byear.indexOf(Integer.valueOf(cursor.getString(2).substring(0, 4))));
+                b_month.setSelection(bmonth.indexOf(Integer.valueOf(cursor.getString(2).substring(5, 7))));
+                b_day.setSelection(bday.indexOf(Integer.valueOf(cursor.getString(2).substring(8, 10))));
             }
             if(cursor.getString(3) != null){//不為空值才設定起始年月日 => 交往日
-                r_year.setSelection(ryear.indexOf(cursor.getString(3).substring(0, 4)));
-                r_month.setSelection(rmonth.indexOf(cursor.getString(3).substring(5, 7)));
-                r_day.setSelection(rday.indexOf(cursor.getString(3).substring(8, 10)));
+                r_year.setSelection(ryear.indexOf(Integer.valueOf(cursor.getString(3).substring(0, 4))));
+                r_month.setSelection(rmonth.indexOf(Integer.valueOf(cursor.getString(3).substring(5, 7))));
+                r_day.setSelection(rday.indexOf(Integer.valueOf(cursor.getString(3).substring(8, 10))));
             }
         }while(cursor.moveToNext());
         db.close();
@@ -180,12 +198,12 @@ public class MemberData extends AppCompatActivity
                 else
                     relationshipstr = r_year.getSelectedItem().toString() + "-" + r_month.getSelectedItem().toString() + "-" +r_day.getSelectedItem().toString();
                 //傳資料給SQLite MariaDB
-                db = openOrCreateDatabase("userdb.db", MODE_PRIVATE, null);//打開資料庫
-                Cursor cursor = db.rawQuery("", null);
+                db = openOrCreateDatabase("userdb.db", MODE_PRIVATE, null);//打開SQLite資料庫
+                db.execSQL("UPDATE member SET name = '"+nameStr+"', gender = '"+genderInt+"', birthday = '"+birthdayStr+"', relationship_date = '"+relationshipstr+"' WHERE _id = '"+id+"'");
                 db.close();
-                insertIntoMariaDB();//MariaDB
+                insertIntoMariaDB(nameStr, genderInt, birthdayStr, relationshipstr);//MariaDB
                 //跳回首頁
-                Intent intent = new Intent(MemberData.this, MainActivity.class);
+                Intent intent = new Intent(MemberData.this, HomePageActivity.class);
                 startActivity(intent);
             }
         });
@@ -254,11 +272,33 @@ public class MemberData extends AppCompatActivity
     /**
      * 將修改的資料放入MariaDB
      */
-    public void insertIntoMariaDB(){
+    public void insertIntoMariaDB(final String name, final int gender, final String birthday, final String relationship){//要給inner class用要加final
+        mContext = this;
+        mRequestQueue = Volley.newRequestQueue(mContext);
+        mStringRequest = new StringRequest(Request.Method.POST, conAPI+"updateMemberData.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
 
+                map.put("User", id);
+                map.put("Name", name);
+                map.put("Gender", ""+gender);//轉成String
+                map.put("Birthday", birthday);
+                map.put("Relationship", relationship);
+                return map;
+            }
+        };
+        mRequestQueue.add(mStringRequest);
     }
 }
 //第一次登入從直接跳來這裡
-//從sqlite撈出正確資料
-//印出原本的會員資料
-//修改完存入SQLite與MariaDB(button)

@@ -23,13 +23,6 @@
 
     <include layout="@layout/content_member_data" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/viewObj"
@@ -42,126 +35,148 @@
         tools:context="m.mcoupledate.Home"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Name"
-            android:id="@+id/name"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="128dp" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Gender"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/frameLayout">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Birthday"
-            android:id="@+id/birthday"
-            android:layout_below="@+id/gender"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="69dp" />
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:ems="10"
+                    android:id="@+id/username"
+                    android:hint="Name"
+                    android:gravity="center"
+                    android:maxLength="16"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="46dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
+            </FrameLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="交往紀念日"
-            android:id="@+id/reletionship"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="64dp" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:layout_below="@+id/frameLayout"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/linearLayout">
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/editText"
-            android:layout_alignTop="@+id/name"
-            android:layout_toRightOf="@+id/reletionship"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Birthday"
+                    android:id="@+id/textView6" />
 
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/b_day"
-            android:layout_alignTop="@+id/b_month"
-            android:layout_toRightOf="@+id/b_month"
-            android:layout_toEndOf="@+id/b_month"
-            android:layout_alignBottom="@+id/b_month" />
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:ems="10"
+                    android:id="@+id/b_year"
+                    android:maxLength = "4"
+                    android:hint="Year"
+                    android:gravity="center"
+                    android:digits="1234567890"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
 
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/b_month"
-            android:layout_alignTop="@+id/b_year"
-            android:layout_toRightOf="@+id/b_year"
-            android:layout_toEndOf="@+id/b_year"
-            android:layout_alignBottom="@+id/b_year" />
+                <EditText
+                    android:layout_width="60sp"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:ems="6"
+                    android:maxLength = "2"
+                    android:hint="Month"
+                    android:gravity="center"
+                    android:digits="1234567890"
+                    android:id="@+id/b_month" />
 
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/b_year"
-            android:layout_alignTop="@+id/birthday"
-            android:layout_alignBottom="@+id/birthday"
-            android:layout_alignLeft="@+id/editText"
-            android:layout_alignStart="@+id/editText" />
+                <EditText
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:ems="10"
+                    android:hint="Day"
+                    android:gravity="center"
+                    android:maxLength="2"
+                    android:digits="1234567890"
+                    android:id="@+id/b_day" />
 
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/r_year"
-            android:layout_toRightOf="@+id/reletionship"
-            android:layout_toEndOf="@+id/reletionship"
-            android:layout_alignTop="@+id/reletionship"
-            android:layout_alignBottom="@+id/reletionship" />
+            </LinearLayout>
 
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/r_month"
-            android:layout_alignTop="@+id/r_year"
-            android:layout_toRightOf="@+id/r_year"
-            android:layout_toEndOf="@+id/r_year"
-            android:layout_alignBottom="@+id/r_year" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="259dp"
+                android:layout_below="@+id/linearLayout"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true">
 
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/r_day"
-            android:layout_alignTop="@+id/r_month"
-            android:layout_toRightOf="@+id/r_month"
-            android:layout_toEndOf="@+id/r_month"
-            android:layout_alignBottom="@+id/r_month" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MermorialDay"
+                    android:id="@+id/textView" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="確定修改"
-            android:id="@+id/button"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+                <EditText
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:ems="10"
+                    android:hint="Year"
+                    android:gravity="center"
+                    android:digits="1234567890"
+                    android:id="@+id/r_year" />
 
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/gender"
-            android:layout_centerVertical="true"
-            android:layout_alignLeft="@+id/button"
-            android:layout_alignStart="@+id/button" />
+                <EditText
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:ems="10"
+                    android:hint="Month"
+                    android:gravity="center"
+                    android:digits="1234567890"
+                    android:id="@+id/r_month" />
+
+                <EditText
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:ems="10"
+                    android:hint="Day"
+                    android:gravity="center"
+                    android:digits="1234567890"
+                    android:id="@+id/r_day" />
+
+            </LinearLayout>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="確定修改"
+                android:id="@+id/button"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true" />
+
+        </LinearLayout>
+
 
     </RelativeLayout>
 

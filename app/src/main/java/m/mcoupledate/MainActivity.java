@@ -100,6 +100,9 @@ public class MainActivity extends AppCompatActivity implements
         initFBLoginBtn();
         initGPlusLoginBtn();
 
+        //Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
+        //startActivity(intent);
+
     }
 
 

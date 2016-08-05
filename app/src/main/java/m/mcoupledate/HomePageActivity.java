@@ -1,12 +1,9 @@
 package m.mcoupledate;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,28 +14,14 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class HomePageActivity extends AppCompatActivity
@@ -46,24 +29,13 @@ public class HomePageActivity extends AppCompatActivity
 
     private String conAPI = "http://140.117.71.216/pinkCon/";
 
-    private Context mContext;
-    private RequestQueue mRequestQueue;
-    private StringRequest mStringRequest;
 
     private String id = MainActivity.getUserId();
+    //private String id = "1763438647274913";
     private SQLiteDatabase db = null;
-    private int count;
 
-    private String data[];
-
-    // 宣告 LinearLayout 物件(為了動態新增)
-    private LinearLayout homeLayout;
-    //private TextView tsetDialog;
     //此TextView是靜態新增的
     private TextView totalDaysDialog;
-
-    private ViewGroup mLayout;
-    private int img[] = {R.drawable.ic_menu_camera,R.drawable.ic_menu_gallery,R.drawable.ic_menu_manage,R.drawable.ic_menu_send};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +44,6 @@ public class HomePageActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -100,18 +71,6 @@ public class HomePageActivity extends AppCompatActivity
             printMemorialDays(tsetDialog);
          }*/
         printMemorialDays();
-    }
-
-    //新增單筆紀念日資料
-    public void init(String name, String date, int diff)
-    {
-            LinearLayout linearLayout1=(LinearLayout)findViewById(R.id.activity_service_select);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            View view =LayoutInflater.from(this).inflate(R.layout.mday_data, null);
-            view.setLayoutParams(lp);
-            TextView tv1 = (TextView) view.findViewById(R.id.mContext);
-            tv1.setText(name);
-            linearLayout1.addView(view);
     }
 
     //算總共交往多久(新版)
@@ -208,6 +167,23 @@ public class HomePageActivity extends AppCompatActivity
                 }
             }
         }while(cursor.moveToNext());
+    }
+
+    //新增單筆紀念日資料
+    public void init(String name, String date, int diff)
+    {
+        String diffDay = Integer.toString(diff);
+        LinearLayout linearLayout1=(LinearLayout)findViewById(R.id.activity_service_select);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        View view =LayoutInflater.from(this).inflate(R.layout.mday_data, null);
+        view.setLayoutParams(lp);
+        TextView tv1 = (TextView) view.findViewById(R.id.mContext);
+        TextView tv2 = (TextView) view.findViewById(R.id.mTime);
+        TextView tv3 = (TextView) view.findViewById(R.id.diffTime);
+        tv1.setText(name);
+        tv2.setText(date);
+        tv3.setText(diffDay);
+        linearLayout1.addView(view);
     }
 
     @Override

@@ -196,11 +196,6 @@ public class MemberData extends AppCompatActivity
                     else if(tag==5) Toast.makeText(MemberData.this, "請輸入您的生日", Toast.LENGTH_SHORT).show();
                     else if(tag==6) Toast.makeText(MemberData.this, "請輸入您的生日", Toast.LENGTH_SHORT).show();
 
-                   /* if (yearB == "" || monthB == "" || dayB == "")
-                        Toast.makeText(MemberData.this, "請輸入您的生日", Toast.LENGTH_SHORT).show();
-                    if (yearM == "" || monthM == "" || dayM == "")
-                        Toast.makeText(MemberData.this, "請輸入您的紀念日", Toast.LENGTH_SHORT).show();*/
-
                     else {
                         //正確輸入範圍判 else {斷
 
@@ -246,6 +241,7 @@ public class MemberData extends AppCompatActivity
                             else
                                 birthdayStr = b_yearS + "-" + b_monthS + "-" + b_dayS;
 
+                            //彈出是視窗顯示birthdayStr
                             Toast.makeText(MemberData.this, "生日"+ birthdayStr, Toast.LENGTH_SHORT).show();
 
                             String relationshipstr = "";
@@ -258,13 +254,15 @@ public class MemberData extends AppCompatActivity
                             else
                                 relationshipstr =m_yearS + "-" + m_monthS + "-" + m_dayS;
 
+                            //彈出是視窗顯示relationshipstr
                             Toast.makeText(MemberData.this, "紀念日"+ relationshipstr, Toast.LENGTH_SHORT).show();
 
                             //傳資料給SQLite MariaDB
+                            int g=0;
                             db = openOrCreateDatabase("userdb.db", MODE_PRIVATE, null);//打開SQLite資料庫
-                            db.execSQL("UPDATE member SET name = '"+nameStr+"', gender = '"+0+"', birthday = '"+birthdayStr+"', relationship_date = '"+relationshipstr+"' WHERE _id = '"+id+"'");
+                            db.execSQL("UPDATE member SET name = '"+nameStr+"', gender = '"+g+"', birthday = '"+birthdayStr+"', relationship_date = '"+relationshipstr+"' WHERE _id = '"+id+"'");
                             db.close();
-                            insertIntoMariaDB(nameStr,0 , birthdayStr, relationshipstr);//MariaDB
+                            insertIntoMariaDB(nameStr,g , birthdayStr, relationshipstr);//MariaDB
                             //跳回首頁
                             Intent intent = new Intent(MemberData.this, HomePageActivity.class);
                             startActivity(intent);

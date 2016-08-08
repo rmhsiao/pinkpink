@@ -30,8 +30,8 @@ public class HomePageActivity extends AppCompatActivity
     private String conAPI = "http://140.117.71.216/pinkCon/";
 
 
-    //private String id = MainActivity.getUserId();
-    private String id = "1763438647274913";
+    private String id = MainActivity.getUserId();
+    //private String id = "1763438647274913";
     private SQLiteDatabase db = null;
 
     //此TextView是靜態新增的

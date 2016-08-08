@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements
         View.OnClickListener,
         GoogleApiClient.OnConnectionFailedListener  {
 
+    //callback錯誤
     private CallbackManager fbCallbackManager;
     private GoogleApiClient mGoogleApiClient;
 

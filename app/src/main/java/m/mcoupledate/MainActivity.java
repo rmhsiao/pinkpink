@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,6 +28,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -100,8 +100,8 @@ public class MainActivity extends AppCompatActivity implements
         initFBLoginBtn();
         initGPlusLoginBtn();
 
-        //Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
-        //startActivity(intent);
+        Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
+        startActivity(intent);
 
     }
 

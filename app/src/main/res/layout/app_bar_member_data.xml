@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/toolbarM"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -37,143 +37,207 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            >
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/frameLayout">
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:ems="10"
-                    android:id="@+id/username"
-                    android:hint="Name"
-                    android:gravity="center"
-                    android:maxLength="16"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginTop="46dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
-            </FrameLayout>
+            android:layout_marginTop="50dp">
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp">
+
+                <ImageView
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:src="@drawable/person"
+                    android:layout_gravity="bottom" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:weightSum="1"
+                    android:layout_marginLeft="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Name"
+                        android:id="@+id/textView3"
+                        android:layout_marginTop="40dp" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:ems="10"
+                        android:id="@+id/username"
+                        android:hint="Name"
+                        android:gravity="center"
+                        android:maxLength="16"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_weight="0.48"
+                        android:layout_gravity="bottom" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
                 android:weightSum="1"
                 android:layout_below="@+id/frameLayout"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:id="@+id/linearLayout">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Birthday"
-                    android:id="@+id/textView6" />
+                <ImageView
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:src="@drawable/cake"
+                    android:layout_gravity="bottom" />
 
-                <EditText
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="date"
-                    android:ems="10"
-                    android:id="@+id/b_year"
-                    android:maxLength = "4"
-                    android:hint="Year"
-                    android:gravity="center"
-                    android:digits="1234567890"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp">
 
-                <EditText
-                    android:layout_width="60sp"
-                    android:layout_height="wrap_content"
-                    android:inputType="date"
-                    android:ems="6"
-                    android:maxLength = "2"
-                    android:hint="Month"
-                    android:gravity="center"
-                    android:digits="1234567890"
-                    android:id="@+id/b_month" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Birthday"
+                        android:id="@+id/textView6"
+                        android:layout_marginTop="30dp" />
 
-                <EditText
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="date"
-                    android:ems="10"
-                    android:hint="Day"
-                    android:gravity="center"
-                    android:maxLength="2"
-                    android:digits="1234567890"
-                    android:id="@+id/b_day" />
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <EditText
+                            android:layout_width="100dp"
+                            android:layout_height="50dp"
+                            android:inputType="date"
+                            android:ems="10"
+                            android:id="@+id/b_year"
+                            android:maxLength = "4"
+                            android:hint="Year"
+                            android:gravity="center"
+                            android:digits="1234567890"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginBottom="0dp"
+                            android:layout_gravity="bottom" />
+
+                        <EditText
+                            android:layout_width="100dp"
+                            android:layout_height="50dp"
+                            android:inputType="date"
+                            android:ems="6"
+                            android:maxLength = "2"
+                            android:hint="Month"
+                            android:gravity="center"
+                            android:digits="1234567890"
+                            android:id="@+id/b_month"
+                            android:layout_gravity="bottom" />
+
+                        <EditText
+                            android:layout_width="100dp"
+                            android:layout_height="50dp"
+                            android:inputType="date"
+                            android:ems="10"
+                            android:hint="Day"
+                            android:gravity="center"
+                            android:maxLength="2"
+                            android:digits="1234567890"
+                            android:id="@+id/b_day"
+                            android:layout_gravity="bottom" />" />
+                    </LinearLayout>
+                </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="259dp"
+                android:layout_height="100dp"
                 android:layout_below="@+id/linearLayout"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="MermorialDay"
-                    android:id="@+id/textView" />
+                <ImageView
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:src="@drawable/calendar"
+                    android:layout_gravity="bottom" />
 
-                <EditText
-                    android:layout_width="75dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="date"
-                    android:ems="10"
-                    android:hint="Year"
-                    android:gravity="center"
-                    android:digits="1234567890"
-                    android:id="@+id/r_year" />
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp">
 
-                <EditText
-                    android:layout_width="75dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="date"
-                    android:ems="10"
-                    android:hint="Month"
-                    android:gravity="center"
-                    android:digits="1234567890"
-                    android:id="@+id/r_month" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="MermorialDay"
+                        android:id="@+id/textView"
+                        android:layout_marginTop="30dp" />
 
-                <EditText
-                    android:layout_width="75dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="date"
-                    android:ems="10"
-                    android:hint="Day"
-                    android:gravity="center"
-                    android:digits="1234567890"
-                    android:id="@+id/r_day" />
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <EditText
+                            android:layout_width="100dp"
+                            android:layout_height="50dp"
+                            android:inputType="date"
+                            android:ems="10"
+                            android:hint="Year"
+                            android:gravity="center"
+                            android:digits="1234567890"
+                            android:id="@+id/r_year"
+                            android:layout_gravity="bottom" />
+
+                        <EditText
+                            android:layout_width="100dp"
+                            android:layout_height="50dp"
+                            android:inputType="date"
+                            android:ems="10"
+                            android:hint="Month"
+                            android:gravity="center"
+                            android:digits="1234567890"
+                            android:id="@+id/r_month"
+                            android:layout_gravity="bottom" />
+
+                        <EditText
+                            android:layout_width="100dp"
+                            android:layout_height="50dp"
+                            android:inputType="date"
+                            android:ems="10"
+                            android:hint="Day"
+                            android:gravity="center"
+                            android:digits="1234567890"
+                            android:id="@+id/r_day"
+                            android:layout_gravity="bottom" />
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="確定修改"
-                android:id="@+id/button"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true" />
 
         </LinearLayout>
 

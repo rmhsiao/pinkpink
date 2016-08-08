@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -61,8 +60,9 @@ public class MemberData extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_data);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarM);
         setSupportActionBar(toolbar);
+        toolbar.setOnMenuItemClickListener(onMenuItemClick);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -80,10 +80,13 @@ public class MemberData extends AppCompatActivity
         b_month = (EditText)findViewById(R.id.b_month);
         b_month.toString();
         b_day = (EditText)findViewById(R.id.b_day);
+        b_day.toString();
         r_year = (EditText)findViewById(R.id.r_year);
         r_year.toString();
         r_month = (EditText)findViewById(R.id.r_month);
+        r_month.toString();
         r_day = (EditText)findViewById(R.id.r_day);
+        r_day.toString();
         //傳送些改的button
         button = (Button)findViewById(R.id.button);
 
@@ -111,96 +114,6 @@ public class MemberData extends AppCompatActivity
             }
         }while(cursor.moveToNext());
         db.close();
-        //傳送修改的button 監測器
-        button.setOnClickListener(new Button.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                String nameStr = editText.getText().toString();
-                String yearB="";
-                String monthB="";
-                String dayB="";
-                String yearM="";
-                String monthM="";
-                String dayM="";
-
-                if("".equals(b_year.getText().toString().trim())) yearB ="";
-                else if("".equals(b_month.getText().toString().trim())) monthB ="";
-                else if("".equals(b_day.getText().toString().trim())) dayB ="";
-
-                else {
-                    yearB = b_year.getText().toString();
-                    monthB = b_month.getText().toString();
-                    dayB = b_day.getText().toString();
-                }
-
-                if("".equals(b_year.getText().toString().trim())) yearB ="";
-                else if("".equals(b_month.getText().toString().trim())) monthB ="";
-                else if("".equals(b_day.getText().toString().trim())) dayB ="";
-
-                else{
-                    yearM = r_year.getText().toString();
-                    monthM = r_month.getText().toString();
-                    dayM = r_day.getText().toString();
-                }
-
-                if (yearB==""||monthB==""||dayB=="")
-                    Toast.makeText(MemberData.this, "請輸入您的生日",Toast.LENGTH_SHORT).show();
-                else if (yearM==""||monthM==""||dayM=="")
-                    Toast.makeText(MemberData.this, "請輸入您的生日",Toast.LENGTH_SHORT).show();
-                else {
-
-                    int b_year = Integer.parseInt(yearB);
-                    int b_month = Integer.parseInt(monthB);
-                    int b_day = Integer.parseInt(dayB);
-                    int m_year = Integer.parseInt(yearM);
-
-                    if (b_year < 1900 || b_year > 2016 || yearB == "")
-                        Toast.makeText(MemberData.this, "請輸入正確生日年份(西元)", Toast.LENGTH_SHORT).show();
-                    else if (b_month > 12 )
-                        Toast.makeText(MemberData.this, "請輸入正確生日月份", Toast.LENGTH_SHORT).show();
-                    else if (b_day > 31 )
-                        Toast.makeText(MemberData.this, "請輸入正確生日日期", Toast.LENGTH_SHORT).show();
-
-                    if (m_year < 1900 || m_year > 2016 || yearM == "")
-                        Toast.makeText(MemberData.this, "請輸入正確紀念日年份(西元)", Toast.LENGTH_SHORT).show();
-                    else if (b_month > 12 )
-                        Toast.makeText(MemberData.this, "請輸入正確紀念日月份", Toast.LENGTH_SHORT).show();
-                    else if (b_day > 31 )
-                        Toast.makeText(MemberData.this, "請輸入正確紀念日日期", Toast.LENGTH_SHORT).show();
-
-                    else {
-                        String birthdayStr = "";
-                      /*  if((Integer)b_month < 10 && (Integer)b_day< 10)
-                            birthdayStr = b_year.getSelectedItem().toString() + "-0" + b_month.getSelectedItem().toString() + "-0" +b_day.getSelectedItem().toString();
-                        else if((Integer)b_month.getSelectedItem() < 10 && (Integer)b_day.getSelectedItem() >= 10)
-                            birthdayStr = b_year.getSelectedItem().toString() + "-0" + b_month.getSelectedItem().toString() + "-" +b_day.getSelectedItem().toString();
-                        else if((Integer)b_month.getSelectedItem() >= 10 && (Integer)b_day.getSelectedItem() < 10)
-                            birthdayStr = b_year.getSelectedItem().toString() + "-" + b_month.getSelectedItem().toString() + "-0" +b_day.getSelectedItem().toString();
-                        else
-                            birthdayStr = b_year.getSelectedItem().toString() + "-" + b_month.getSelectedItem().toString() + "-" +b_day.getSelectedItem().toString();
-                        String relationshipstr = "";
-                        if((Integer)r_month.getSelectedItem() < 10 && (Integer)r_day.getSelectedItem() < 10)
-                        relationshipstr = r_year.getSelectedItem().toString() + "-0" + r_month.getSelectedItem().toString() + "-0" +r_day.getSelectedItem().toString();
-                        else if((Integer)r_month.getSelectedItem() < 10 && (Integer)r_day.getSelectedItem() >= 10)
-                        relationshipstr = r_year.getSelectedItem().toString() + "-0" + r_month.getSelectedItem().toString() + "-" +r_day.getSelectedItem().toString();
-                        else if((Integer)r_month.getSelectedItem() >= 10 && (Integer)r_day.getSelectedItem() < 10)
-                        relationshipstr = r_year.getSelectedItem().toString() + "-" + r_month.getSelectedItem().toString() + "-0" +r_day.getSelectedItem().toString();
-                        else
-                        relationshipstr = r_year.getSelectedItem().toString() + "-" + r_month.getSelectedItem().toString() + "-" +r_day.getSelectedItem().toString();
-                    */
-                        //傳資料給SQLite MariaDB
-                        //        db = openOrCreateDatabase("userdb.db", MODE_PRIVATE, null);//打開SQLite資料庫
-                        //        db.execSQL("UPDATE member SET name = '"+nameStr+"', gender = '"+genderInt+"', birthday = '"+birthdayStr+"', relationship_date = '"+relationshipstr+"' WHERE _id = '"+id+"'");
-                        //        db.close();
-                        //        insertIntoMariaDB(nameStr, genderInt, birthdayStr, relationshipstr);//MariaDB
-                        //跳回首頁
-                        Intent intent = new Intent(MemberData.this, HomePageActivity.class);
-                        startActivity(intent);
-                    }
-                }
-            }
-        });
-
     }
 
     @Override
@@ -216,24 +129,155 @@ public class MemberData extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home_page, menu);
+        getMenuInflater().inflate(R.menu.member_data, menu);
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+            String msg = "";
+            switch (menuItem.getItemId()) {
+                case R.id.action_check:
+                    String nameStr = editText.getText().toString();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+                    //設定初始值為空
+                    String yearB="";
+                    String monthB="";
+                    String dayB="";
+                    String yearM="";
+                    String monthM="";
+                    String dayM="";
+                    int tag=0;
+
+                    //如果為空 予空值  若非則提取值
+                    if("".equals(b_year.getText().toString().trim())) {
+                        yearB = "";
+                        tag = 1;
+                    }
+                    else yearB = b_year.getText().toString();
+
+                    if("".equals(b_month.getText().toString().trim())) {
+                        monthB = "";
+                        tag = 2;
+                    }
+                    else monthB = b_month.getText().toString();
+
+                    if("".equals(b_day.getText().toString().trim())) {
+                        dayB = "";
+                        tag = 3;
+                    }
+                    else dayB = b_day.getText().toString();
+
+                    if("".equals(r_year.getText().toString().trim())) {
+                        yearM ="";
+                        tag=4;
+                    }
+                    else yearM = r_year.getText().toString();
+
+                    if("".equals(r_month.getText().toString().trim())) {
+                        monthM ="";
+                        tag=5;
+                    }
+                    else monthM = r_month.getText().toString();
+
+                    if("".equals(r_day.getText().toString().trim())) {
+                        dayM ="";
+                        tag=6;
+                    }
+                    else dayM = r_day.getText().toString();
+
+
+                    //空值提醒
+                    if(tag==1) Toast.makeText(MemberData.this, "請輸入您的生日", Toast.LENGTH_SHORT).show();
+                    else if(tag==2) Toast.makeText(MemberData.this, "請輸入您的生日", Toast.LENGTH_SHORT).show();
+                    else if(tag==3) Toast.makeText(MemberData.this, "請輸入您的生日", Toast.LENGTH_SHORT).show();
+                    else if(tag==4) Toast.makeText(MemberData.this, "請輸入您的生日", Toast.LENGTH_SHORT).show();
+                    else if(tag==5) Toast.makeText(MemberData.this, "請輸入您的生日", Toast.LENGTH_SHORT).show();
+                    else if(tag==6) Toast.makeText(MemberData.this, "請輸入您的生日", Toast.LENGTH_SHORT).show();
+
+                   /* if (yearB == "" || monthB == "" || dayB == "")
+                        Toast.makeText(MemberData.this, "請輸入您的生日", Toast.LENGTH_SHORT).show();
+                    if (yearM == "" || monthM == "" || dayM == "")
+                        Toast.makeText(MemberData.this, "請輸入您的紀念日", Toast.LENGTH_SHORT).show();*/
+
+                    else {
+                        //正確輸入範圍判 else {斷
+
+                        //測試用
+                        //Toast.makeText(MemberData.this, "YES", Toast.LENGTH_SHORT).show();
+
+                        int b_year = Integer.parseInt(yearB);
+                        int b_month = Integer.parseInt(monthB);
+                        int b_day = Integer.parseInt(dayB);
+                        int m_year = Integer.parseInt(yearM);
+                        int m_month = Integer.parseInt(monthM);
+                        int m_day = Integer.parseInt(dayM);
+
+                        if (b_year < 1900 || b_year > 2016 || yearB == "")
+                            Toast.makeText(MemberData.this, "請輸入正確生日年份(西元)", Toast.LENGTH_SHORT).show();
+                        else if (b_month > 12)
+                            Toast.makeText(MemberData.this, "請輸入正確生日月份", Toast.LENGTH_SHORT).show();
+                        else if (b_day > 31)
+                            Toast.makeText(MemberData.this, "請輸入正確生日日期", Toast.LENGTH_SHORT).show();
+
+                        else if (m_year < 1900 || m_year > 2016 || yearM == "")
+                            Toast.makeText(MemberData.this, "請輸入正確紀念日年份(西元)", Toast.LENGTH_SHORT).show();
+                        else if (m_month > 12)
+                            Toast.makeText(MemberData.this, "請輸入正確紀念日月份", Toast.LENGTH_SHORT).show();
+                        else if (m_day > 31)
+                            Toast.makeText(MemberData.this, "請輸入正確紀念日日期", Toast.LENGTH_SHORT).show();
+
+                        else {
+                            String b_yearS = Integer.toString(b_year);
+                            String b_monthS = Integer.toString(b_month);
+                            String b_dayS = Integer.toString(b_day);
+                            String m_yearS = Integer.toString(m_year);
+                            String m_monthS = Integer.toString(m_month);
+                            String m_dayS = Integer.toString(m_day);
+
+                            String birthdayStr = "";
+                            if(b_month < 10 && b_day< 10)
+                                birthdayStr = b_yearS + "-0" + b_monthS + "-0" +b_dayS;
+                            else if(b_month < 10 && b_day >= 10)
+                                birthdayStr =b_yearS + "-0" + b_monthS + "-" + b_dayS;
+                            else if(b_month >= 10 && b_day < 10)
+                                birthdayStr = b_yearS + "-" + b_monthS + "-0" + b_dayS;
+                            else
+                                birthdayStr = b_yearS + "-" + b_monthS + "-" + b_dayS;
+
+                            Toast.makeText(MemberData.this, "生日"+ birthdayStr, Toast.LENGTH_SHORT).show();
+
+                            String relationshipstr = "";
+                            if(m_month < 10 && m_day < 10)
+                                relationshipstr = m_yearS + "-0" + m_monthS.toString() + "-0" + m_dayS;
+                            else if(m_month < 10 && m_day >= 10)
+                                relationshipstr = m_yearS + "-0" + m_monthS + "-" + m_dayS;
+                            else if(m_month >= 10 && m_day < 10)
+                                relationshipstr = m_yearS + "-" + m_monthS + "-0" + m_dayS;
+                            else
+                                relationshipstr =m_yearS + "-" + m_monthS + "-" + m_dayS;
+
+                            Toast.makeText(MemberData.this, "紀念日"+ relationshipstr, Toast.LENGTH_SHORT).show();
+
+                            //傳資料給SQLite MariaDB
+                            db = openOrCreateDatabase("userdb.db", MODE_PRIVATE, null);//打開SQLite資料庫
+                            db.execSQL("UPDATE member SET name = '"+nameStr+"', gender = '"+0+"', birthday = '"+birthdayStr+"', relationship_date = '"+relationshipstr+"' WHERE _id = '"+id+"'");
+                            db.close();
+                            insertIntoMariaDB(nameStr,0 , birthdayStr, relationshipstr);//MariaDB
+                            //跳回首頁
+                            Intent intent = new Intent(MemberData.this, HomePageActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+            }
+
+            if(!msg.equals("")) {
+                Toast.makeText(MemberData.this, msg, Toast.LENGTH_SHORT).show();
+            }
             return true;
         }
-
-        return super.onOptionsItemSelected(item);
-    }
+    };
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

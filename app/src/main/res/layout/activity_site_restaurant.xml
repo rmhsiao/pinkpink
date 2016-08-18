@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/LinearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="191dp"
+        android:orientation="vertical"
+        android:weightSum="1">
+    <Spinner
+        android:id="@+id/large"
+        android:layout_width="100sp"
+        android:layout_height="30sp"
+        android:spinnerMode="dropdown"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+        <Spinner
+            android:id="@+id/country"
+            android:layout_width="100sp"
+            android:layout_height="30sp"
+            android:spinnerMode="dropdown"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Spinner
+        android:id="@+id/small"
+        android:layout_width="100sp"
+        android:layout_height="30sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <Spinner
+            android:id="@+id/kind"
+            android:layout_width="100sp"
+            android:layout_height="30sp"
+            android:spinnerMode="dropdown"
+            android:layout_gravity="center_horizontal"
+            android:layout_centerVertical="true"
+            android:layout_alignLeft="@+id/small"
+            android:layout_alignStart="@+id/small" />
+
+        <Spinner
+            android:id="@+id/time"
+            android:layout_width="100sp"
+            android:layout_height="30sp"
+            android:spinnerMode="dropdown"
+
+            android:layout_alignTop="@+id/kind"
+            android:layout_alignLeft="@+id/large"
+            android:layout_alignStart="@+id/large" />
+
+        <Spinner
+            android:id="@+id/country2"
+            android:layout_width="100sp"
+            android:layout_height="30sp"
+            android:spinnerMode="dropdown"
+
+            android:layout_alignParentBottom="true"
+            android:layout_alignLeft="@+id/time"
+            android:layout_alignStart="@+id/time" />
+
+        <Spinner
+            android:id="@+id/country3"
+            android:layout_width="100sp"
+            android:layout_height="30sp"
+            android:spinnerMode="dropdown"
+
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/attraction_in_sv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:orientation="vertical">
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:fillViewport="false"
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:id="@+id/attractionL"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

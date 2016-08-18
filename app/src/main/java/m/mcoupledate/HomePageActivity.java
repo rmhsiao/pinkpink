@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,6 +18,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnMenuTabClickListener;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -29,7 +34,6 @@ public class HomePageActivity extends AppCompatActivity
 
     private String conAPI = "http://140.117.71.216/pinkCon/";
 
-
     private String id = MainActivity.getUserId();
     //private String id = "1763438647274913";
     private SQLiteDatabase db = null;
@@ -37,10 +41,43 @@ public class HomePageActivity extends AppCompatActivity
     //此TextView是靜態新增的
     private TextView totalDaysDialog;
 
+    private BottomBar mBottomBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+
+        mBottomBar = BottomBar.attach(this, savedInstanceState);
+        mBottomBar.setItems(R.menu.bottom_menu);
+        mBottomBar.setOnMenuTabClickListener(new OnMenuTabClickListener() {
+            @Override
+            public void onMenuTabSelected(@IdRes int menuItemId) {
+                //单击事件 menuItemId 是 R.menu.bottombar_menu 中 item 的 id
+                switch (menuItemId) {
+                    case R.id.bb_menu_memorialday:
+                        break;
+                    case R.id.bb_menu_site:
+                        Intent go2 = new Intent(HomePageActivity.this, SiteActivity.class);
+                        startActivity(go2);
+                        break;
+                    case R.id.bb_menu_trip:
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onMenuTabReSelected(@IdRes int menuItemId) {
+                //重选事件，当前已经选择了这个，又点了这个tab。微博点击首页刷新页面
+            }
+        });
+
+        // 当点击不同按钮的时候，设置不同的颜色
+        // 可以用以下三种方式来设置颜色.
+        mBottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.colorAccent));
+        mBottomBar.mapColorForTab(1, 0xFF5D4037);
+        mBottomBar.mapColorForTab(2, "#7B1FA2");
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -57,20 +94,15 @@ public class HomePageActivity extends AppCompatActivity
         //靜態
         totalDaysDialog = (TextView) findViewById(R.id.totalDaysDialog);
         totalDays();
-
-        // 取得 LinearLayout 物件(為了動態新增)
-      //  homeLayout = (LinearLayout) findViewById(R.id.activity_service_select);
-        //動態
-     //   count = 0;//要抓取第幾筆資料
-        //while(true) {
-   /*     for(int i = 0;i<4;i++){
-            TextView tsetDialog = new TextView(this);
-            tsetDialog.setTextSize(22);
-            tsetDialog.setText("失敗" + count);
-            homeLayout.addView(tsetDialog);
-            printMemorialDays(tsetDialog);
-         }*/
         printMemorialDays();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //保存BottomBar的状态
+        mBottomBar.onSaveInstanceState(outState);
     }
 
     //算總共交往多久(新版)
@@ -236,13 +268,20 @@ public class HomePageActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nav_myViewpoint) {
+            Intent go2 = new Intent(HomePageActivity.this, ManageSiteActivity.class);
+            startActivity(go2);
 
         } else if (id == R.id.nav_myTravle) {
+            Intent go2 = new Intent(HomePageActivity.this, SiteAttractionActivity.class);
+            startActivity(go2);
 
         } else if (id == R.id.nav_travleEdit) {
+            Intent go2 = new Intent(HomePageActivity.this, SiteActivity.class);
+            startActivity(go2);
 
         } else if (id == R.id.nav_logout) {
-
+            Intent go2 = new Intent(HomePageActivity.this, SiteRestaurantActivity.class);
+            startActivity(go2);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

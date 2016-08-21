@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="130dp"
         android:layout_margin="5dp">
 
         <ImageView
-            android:layout_width="160sp"
-            android:layout_height="wrap_content"
+            android:layout_width="129dp"
+            android:layout_height="129dp"
             android:id="@+id/attraction_image"
             android:src="@drawable/site1"
             android:scaleType="centerCrop"
@@ -15,7 +15,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="130dp">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -23,16 +23,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="六十石山"
-                    android:textSize = "20dp"
-                    android:textColor="#000"
-                    android:textStyle="bold"
-                    android:id="@+id/title"
-                    android:layout_margin="5dp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -51,5 +41,16 @@
                     android:stepSize="0.5"
                     android:isIndicator="true"/>
             </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="六十石山"
+                android:textSize = "20dp"
+                android:textColor="#000"
+                android:textStyle="bold"
+                android:id="@+id/title"
+                android:layout_margin="5dp"
+                android:layout_gravity="left|top" />
         </FrameLayout>
 </LinearLayout>

@@ -13,7 +13,6 @@ import android.widget.TextView;
 public class SiteAttractionActivity extends AppCompatActivity {
 
     private Spinner mSpn;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -57,7 +57,7 @@ public class HomePageActivity extends AppCompatActivity
                     case R.id.bb_menu_memorialday:
                         break;
                     case R.id.bb_menu_site:
-                        Intent go2 = new Intent(HomePageActivity.this, SiteActivity.class);
+                        Intent go2 = new Intent(HomePageActivity.this, SiteAttractionActivity.class);
                         startActivity(go2);
                         break;
                     case R.id.bb_menu_trip:

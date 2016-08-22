@@ -1,21 +1,13 @@
 package m.mcoupledate;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,14 +34,11 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
@@ -63,7 +53,8 @@ import java.util.Map;
 
 import m.mcoupledate.classes.ClusterSite;
 import m.mcoupledate.classes.ClusterSiteRenderer;
-import m.mcoupledate.R;
+import m.mcoupledate.classes.WorkaroundMapFragment;
+import m.mcoupledate.funcs.AuthChecker6;
 
 public class AddNewSiteActivity extends AppCompatActivity implements
         OnMapReadyCallback,
@@ -78,62 +69,69 @@ public class AddNewSiteActivity extends AppCompatActivity implements
     SharedPreferences pref;
     SharedPreferences.Editor prefEditor;
 
+    private ScrollView scrollView;
+
     private GoogleMap mMap;
     private ClusterManager<ClusterSite> mClusterManager;
 
-    private LocationManager locationManager;
-    private LocationListener locationListener;
-    private DialogInterface.OnClickListener checkLocatableListener;
-    private int checkLocatableRequestCode = 0;
-    private final int REQ_LOCATION_PERMISSION = 234;
     private final int REQ_INIT_MYLOCATION = 235;
     private final int REQ_GET_MYPOSITION = 236;
 
     RequestQueue mQueue;
     String pinkCon = "http://140.117.71.216/pinkCon/";
 
-    private Context context;
-
     Intent intent;
+
+    private AuthChecker6 mapChecker;    //  用來檢查android 6權限和定位功能是否開啟
 
     private TextView title;
     private ImageButton searchStart, searchClean, submit;
-    private ListView searchSuggestion;
-    private Map<String, EditText> input;
+    private ListView searchSuggestion;  //  搜尋建議
 
-    private int searchSuggestionStatus = 0;
+    private Map<String, EditText> input;    //  輸入欄位的map
+
+
+    private final int USER_TYPING = 0, FROM_SUGGESTIONLIST = 1;
+    private int searchSuggestionStatus = USER_TYPING;
+
     ArrayAdapter<String> adapter;
     ArrayList<String> suggestions;
     private Marker suggestMarker = null;
-    private String suggestAddress = "";
-    private LatLng newSiteLatLng = null;
+    private String suggestAddress = "";     //  利用input查詢到的地址存於此，submit時將此送出為地址
+    private LatLng newSiteLatLng = null;    //  查到的地點的LatLng ，submit時將此送出為Py, Px
 
-
-//    private Timer loadPicTimer;
-//    private int loadPicStatus = 0;
-
+    private final int TOTAG__PLACE = 1, DEFAULT_GESTURE = 0;
+    private int cameraMoveType = DEFAULT_GESTURE;   //  移動地圖camera時，記錄是程式移動或使用者移動，判斷該否先清空cluster
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_site);
 
+        //  從SESSION取得使用者mId
         pref = this.getSharedPreferences("pinkpink", 0);
         prefEditor = pref.edit();
 
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        WorkaroundMapFragment mapFragment = (WorkaroundMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.setListener(new WorkaroundMapFragment.OnTouchListener() {
+            @Override
+            public void onTouch() {
+                scrollView.requestDisallowInterceptTouchEvent(true);
+            }
+        });
+
         mapFragment.getMapAsync(this);
 
         mQueue = Volley.newRequestQueue(this);
-
-        context = getApplicationContext();
 
         intent = this.getIntent();
 
 
         title = (TextView) findViewById(R.id.title);
         title.setText(intent.getStringExtra("TYPE"));
+
 
         input = new HashMap<String, EditText>();
 
@@ -149,11 +147,11 @@ public class AddNewSiteActivity extends AppCompatActivity implements
         input.put("search", (EditText)findViewById(R.id.search));
         input.get("search").addTextChangedListener(new TextWatcher()
         {
-            //  設定當搜尋欄內文字改變時，跟google place api要求建議字句
+            //  設定當地址欄內文字改變時，跟google place api要求建議字句
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
             {
-                if (searchSuggestionStatus==0)
+                if (searchSuggestionStatus==USER_TYPING) // 但若是由程式改變的話則不要求
                 {
                     String query = input.get("search").getText().toString().replace(" ", "+");
                     Uri uri = Uri.parse("https://maps.googleapis.com/maps/api/place/autocomplete/json?input=" + query + "&language=zh-TW&components=country:tw&key=AIzaSyBn1wKXTrwBl2qZRVY9feOZC3aeklAnZXg");
@@ -204,7 +202,7 @@ public class AddNewSiteActivity extends AppCompatActivity implements
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override
             public void afterTextChanged(Editable editable)
-            {   searchSuggestionStatus=0;   }
+            {   searchSuggestionStatus = USER_TYPING;   }
         });
 
         suggestions = new ArrayList<String>();
@@ -223,14 +221,12 @@ public class AddNewSiteActivity extends AppCompatActivity implements
                     return ;
 
                 //  當使用者點擊listItem時，將建議填入搜尋框，設status為0，避免填入時被onTextChanged重新要求
-                searchSuggestionStatus=1;
+                searchSuggestionStatus = FROM_SUGGESTIONLIST;
                 input.get("search").setText(suggestionList.getItemAtPosition(arg2).toString());
                 searchPlaceLocate(suggestionList.getItemAtPosition(arg2).toString());
             }
         });
 
-
-//        loadPicTimer = new Timer();
     }
 
     //  當map載入完成後，相關功能設定並檢查是否可定位
@@ -241,36 +237,33 @@ public class AddNewSiteActivity extends AppCompatActivity implements
         mMap.setOnMapLongClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
 
+        setUpClusterer();
+
+        //  當camera移動時就呼叫 markClusterSites 印出週遭景點
+        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                if (mMap.getCameraPosition().zoom>=12)
+                    markClusterSites(mMap.getCameraPosition().target);
+            }
+        });
+
+        LatLng y = new LatLng(23.9036873,121.0793705);  // 預設台灣
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(y, 6));
 
 
-        locationManager = (LocationManager) (this.getSystemService(Context.LOCATION_SERVICE));
-        locationListener = new LocationListener()
-        {
+        //  檢查是否有存取目前定位的權限，確認後載入附近景點
+        mapChecker = new AuthChecker6(AddNewSiteActivity.this){
             @Override
-            public void onLocationChanged(Location location) {}
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle){}
-            @Override
-            public void onProviderEnabled(String s){}
-            @Override
-            public void onProviderDisabled(String s){}
+            public void onResult(Object result)
+            {
+                Location location = (Location) result;
+                markClusterSites(new LatLng(location.getLatitude(), location.getLongitude()));
+            }
         };
-        checkLocatableListener = new DialogInterface.OnClickListener()
-        {   @Override
-        public void onClick(DialogInterface dialogInterface, int i)
-        {
-            if (i==-1)
-                startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), checkLocatableRequestCode);
-        }
-        };
-
-
-        //  檢查是否有存取定位的權限
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED )
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQ_LOCATION_PERMISSION);
-        else
-            checkLocatableFor(REQ_INIT_MYLOCATION);
+        mapChecker.checkMapMyLocation(mMap);
     }
+
 
     @Override
     public void onMapLongClick(LatLng latLng)
@@ -278,15 +271,12 @@ public class AddNewSiteActivity extends AppCompatActivity implements
         if (suggestMarker!=null)
             suggestMarker.remove();
 
+        cameraMoveType = TOTAG__PLACE;
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (mMap.getMaxZoomLevel()-8)));
         suggestMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("✓ 點擊確認新增"));
         suggestMarker.showInfoWindow();
 
-        markClusterSites(latLng);
-
-
         suggestAddress = "";
-
-
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://maps.googleapis.com/maps/api/geocode/json?latlng="+String.valueOf(latLng.latitude)+","+String.valueOf(latLng.longitude)+"&result_type=street_address&language=zh-TW&key=AIzaSyBn1wKXTrwBl2qZRVY9feOZC3aeklAnZXg",
                 new Response.Listener<String>() {
@@ -317,141 +307,36 @@ public class AddNewSiteActivity extends AppCompatActivity implements
 
     }
 
-    //  若使用者同意權限就初始相關設定，否則就不做事~~
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-    {
-        if (requestCode == REQ_LOCATION_PERMISSION) {
-            if (permissions.length == 1 && permissions[0] == android.Manifest.permission.ACCESS_FINE_LOCATION
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
-                checkLocatableFor(REQ_INIT_MYLOCATION);
-            }
-            else
-            {   // Permission was denied. Display an error message.
-            }
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (requestCode)
-        {
-            case REQ_INIT_MYLOCATION:
-                checkLocatableFor(REQ_INIT_MYLOCATION);
-                break;
-            case REQ_GET_MYPOSITION:
-                checkLocatableFor(REQ_GET_MYPOSITION);
-                break;
-        }
-
-    }
-
-    //  先檢查定位功能先檢查定位功能有否打開，有則初始或抓資料，否則前往設定頁(透過StartActivityForResult)
-    private void checkLocatableFor(int requestCode)
-    {
-        if( !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
-        {
-            checkLocatableRequestCode = requestCode;
-            new AlertDialog.Builder(this)
-                    .setTitle("定位功能未開啟")
-                    .setMessage("目前未開啟定位功能，要開啟定位嗎?")
-                    .setPositiveButton("前往設定頁", checkLocatableListener)
-                    .setNegativeButton("先還不要", checkLocatableListener)
-                    .show();
-
-            return ;
-        }
-
-        switch (requestCode)
-        {
-            case REQ_INIT_MYLOCATION:
-                initMyPositionFunc();
-                break;
-            case REQ_GET_MYPOSITION:
-                getMyLocation();
-                break;
-        }
-    }
-
-    //  設定map的我的位置按鈕
-    private void initMyPositionFunc()
-    {
-        mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
-
-        checkLocatableFor(REQ_GET_MYPOSITION);
-    }
-
-    //  獲取目前位置的座標
-    private void getMyLocation()
-    {
-        Location location = null;
-
-
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-        {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 50, locationListener);
-            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        }
-
-        if (location==null && locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
-        {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1, 50, locationListener);
-            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        }
-
-        if (location==null)
-        {
-            Toast.makeText(this, "無法取得目前位置", Toast.LENGTH_LONG).show();
-            return ;
-        }
-
-//        Toast.makeText(this, location.getLatitude()+" - "+location.getLongitude(), Toast.LENGTH_LONG).show();
-
-        LatLng y = new LatLng(location.getLatitude(), location.getLongitude());
-//        mMap.addMarker(new MarkerOptions().position(y).title("現在位置"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(y, 10));
-
-        setUpClusterer();
-    }
-
-
-
-
     private void setUpClusterer()
     {
         mClusterManager = new ClusterManager<ClusterSite>(this, mMap);
 
         mClusterManager.setRenderer(new ClusterSiteRenderer(AddNewSiteActivity.this, mMap, mClusterManager));
 
-        mMap.setOnCameraChangeListener(mClusterManager);
         mMap.setOnMarkerClickListener(mClusterManager);
         //mMap.setOnInfoWindowClickListener(mClusterManager); //  當點擊資訊視窗時引發事件
 
-
-
-        /*
-                 *  當點擊群集時引發事件
-                 */
+        // 當點擊群集時引發事件
         mClusterManager.setOnClusterClickListener(this);
         mClusterManager.setOnClusterInfoWindowClickListener(this);
         mClusterManager.setOnClusterItemClickListener(this);
         mClusterManager.setOnClusterItemInfoWindowClickListener(this);
 
-//        markSites(myLocation);
-
-//        setPolyline();
     }
-
 
 
     public void markClusterSites(LatLng latlng)
     {
-        mClusterManager.clearItems();
-        mClusterManager.cluster();
+        //  以 cluster 印出 latlng 附近的景點
+
+        if (cameraMoveType== TOTAG__PLACE)  // 若為程式呼叫非使用者移動則不清空cluster
+        {
+            mClusterManager.clearItems();
+            mClusterManager.cluster();
+        }
+
+        cameraMoveType = DEFAULT_GESTURE;  //   判斷完後先改回預設
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, pinkCon+"getAroundSites.php?lat="+latlng.latitude+"&lng="+latlng.longitude,
                 new Response.Listener<String>() {
@@ -488,12 +373,13 @@ public class AddNewSiteActivity extends AppCompatActivity implements
 
         mQueue.add(stringRequest);
 
+
     }
 
     private void setOneMarker(final JSONObject o, final int ifNeedCluster)
     {
 
-        Glide.with(context)
+        Glide.with(AddNewSiteActivity.this)
                 .load(pinkCon + "images/sitePic/" + o.optString("picId") + "a.jpg")
                 .asBitmap()
                 .into(new SimpleTarget<Bitmap>(50, 50)
@@ -509,29 +395,20 @@ public class AddNewSiteActivity extends AppCompatActivity implements
                           @Override
                           public void onLoadFailed(Exception e, Drawable errorDrawable)
                           {
-                              //                            mClusterManager.addItem(new ClusterSite(new LatLng(o.optDouble("Py"), o.optDouble("Px")), o.optString("sName"), context));
+                              //                            mClusterManager.addItem(new ClusterSite(new LatLng(o.optDouble("Py"), o.optDouble("Px")), o.optString("sName"), AddNewSiteActivity.this));
                           }
 
                       }
                 );
     }
 
-    private void setPolyline()
+    @Override
+    public boolean onClusterClick(Cluster<ClusterSite> cluster)
     {
-        // Instantiates a new Polyline object and adds points to define a rectangle
-        PolylineOptions rectOptions = new PolylineOptions()
-                .add(new LatLng(22.633815, 120.3144))
-                .add(new LatLng(22.631362, 120.301087))  // North of the previous point, but at the same longitude
-                .add(new LatLng(22.633011, 120.301568))
-                .color(Color.BLUE)
-                .geodesic(true);  // Same latitude, and 30km to the west
-// Get back the mutable Polyline
-        Polyline polyline = mMap.addPolyline(rectOptions);
-    }
+        // Show a toast with some info when the cluster is clicked.
+        String firstName = cluster.getItems().iterator().next().name;
+        Toast.makeText(this,  firstName+"和"+(cluster.getSize()-1)+"個景點", Toast.LENGTH_SHORT).show();
 
-
-    private void cameraInBounds(Cluster<ClusterSite> cluster)
-    {
         // Zoom in the cluster. Need to create LatLngBounds and including all the cluster items
         // inside of bounds, then animate to center of the bounds.
 
@@ -549,17 +426,6 @@ public class AddNewSiteActivity extends AppCompatActivity implements
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-
-    @Override
-    public boolean onClusterClick(Cluster<ClusterSite> cluster)
-    {
-        // Show a toast with some info when the cluster is clicked.
-        String firstName = cluster.getItems().iterator().next().name;
-        Toast.makeText(this,  firstName+"和"+(cluster.getSize()-1)+"個景點", Toast.LENGTH_SHORT).show();
-
-        cameraInBounds(cluster);
 
         return true;
     }
@@ -587,6 +453,22 @@ public class AddNewSiteActivity extends AppCompatActivity implements
         }
 
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode)
+        {
+            case REQ_INIT_MYLOCATION:
+            case REQ_GET_MYPOSITION:
+                mapChecker.checkMapMyLocation(mMap);
+                break;
+        }
+
+    }
+
 
     @Override
     public void onClick(View view){
@@ -636,9 +518,9 @@ public class AddNewSiteActivity extends AppCompatActivity implements
                                 suggestMarker = mMap.addMarker(new MarkerOptions().position(placeLatLng).title("✓ 點擊確認新增").snippet(place.optString("name")));
 
                                 suggestMarker.showInfoWindow();
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeLatLng, (mMap.getMaxZoomLevel()-8)));
+                                cameraMoveType = TOTAG__PLACE;
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(placeLatLng, (mMap.getMaxZoomLevel()-8)));
 
-                                markClusterSites(placeLatLng);
                             }
                             else
                             {
@@ -660,12 +542,9 @@ public class AddNewSiteActivity extends AppCompatActivity implements
     }
 
 
-
-
     private void submit()
     {
 
-//        final EditText sName = (EditText)findViewById(R.id.sName);
         input.put("description", (EditText) findViewById(R.id.description));
         input.put("phone", (EditText)findViewById(R.id.phone));
         input.put("transportation", (EditText) findViewById(R.id.transportation));
@@ -678,17 +557,8 @@ public class AddNewSiteActivity extends AppCompatActivity implements
         if (checkForm(input)==false)
             return ;
 
-//        final EditText description = (EditText) findViewById(R.id.description);
-//        final EditText phone = (EditText)findViewById(R.id.phone);
-//        final EditText transportation = (EditText) findViewById(R.id.transportation);
-//        final EditText email = (EditText) findViewById(R.id.email);
-//        final EditText website = (EditText) findViewById(R.id.website);
-//        final EditText activity = (EditText) findViewById(R.id.activity);
-//        final EditText note = (EditText) findViewById(R.id.note);
-
         final String Py = String.valueOf(newSiteLatLng.latitude);
         final String Px = String.valueOf(newSiteLatLng.longitude);
-
 
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, pinkCon+"addNewSite.php",
@@ -703,7 +573,7 @@ public class AddNewSiteActivity extends AppCompatActivity implements
                     @Override
                     public void onErrorResponse(VolleyError error)
                     {
-                        Toast.makeText(AddNewSiteActivity.this, error.getMessage()+" - "+error.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddNewSiteActivity.this, "", Toast.LENGTH_SHORT).show();
                     }
                 }){
             @Override
@@ -730,13 +600,13 @@ public class AddNewSiteActivity extends AppCompatActivity implements
 
         mQueue.add(stringRequest);
 
-
     }
 
 
     @Override
     public void onInfoWindowClick(Marker marker)
     {
+        //  若點擊到marker是suggestMarker則點擊是為確認地點
         if (marker.getId().compareTo(suggestMarker.getId())==0)
         {
             newSiteLatLng = suggestMarker.getPosition();
@@ -770,7 +640,6 @@ public class AddNewSiteActivity extends AppCompatActivity implements
         {
             status = false;
             msg += "\n並在地圖上選擇地點";
-
         }
 
         if (status==false)

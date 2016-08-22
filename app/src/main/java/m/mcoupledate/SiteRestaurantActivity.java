@@ -11,36 +11,60 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zxl.library.DropDownMenu;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+
 
 public class SiteRestaurantActivity extends AppCompatActivity {
 
     private String headers[] = {"行政區", "時段", "種類", "口味"};
     private List<View> popupViews = new ArrayList<>();
 
+    DropDownMenu mDropDownMenu;
+
+    public static final int TYPE_LIST_CITY = 1;
+    public static final int TYPE_LIST_SIMPLE = 2;
+    public static final int TYPE_GRID = 3;
+    public static final int TYPE_CUSTOM = 4;
 
    // private m.mcoupledate.ListDropDownAdapter cityAdapter;
 
 
-
+    private int[] types = new int[]{ DropDownMenu.TYPE_GRID , DropDownMenu.TYPE_LIST_CITY, DropDownMenu.TYPE_LIST_SIMPLE ,  DropDownMenu.TYPE_CUSTOM};
     private String area[] = {"不限", "楠梓區", "左營區", "鼓山區", "三民區", "鹽埕區", "前金區", "新興區", "苓雅區", "前鎮區", "旗津區", "小港區", "鳳山區", "大寮區", "鳥松區", "林園區", "仁武區", "大樹區", "大社區", "岡山區"
             , "路竹區", "橋頭區", "梓官區", "彌陀區", "永安區", "燕巢區", "田寮區", "阿蓮區", "茄萣區", "湖內區", "旗山區", "美濃區", "內門區", "杉林區", "甲仙區", "六龜區", "茂林區", "桃源區", "那瑪夏區"};
     private String ages[] = {"不限", "早餐", "午餐", "早午餐", "下午茶", "晚餐", "消夜"};
     private String kinds[] = {"不限", "火烤", "吃到飽", "壽喜燒", "輕食", "晚餐", "素食", "速食", "海鮮", "手搖飲品", "咖啡廳", "小吃", "酒吧", "壽司", "火鍋", "排餐", "鐵板燒", "烘培", "熱炒", "甜點", "冰品", "拉麵", "炸物"};
     private String constellations[] = {"不限", "美式", "歐陸", "南洋", "日式", "韓式", "中港台"};
 
-    private int constellationPosition[] = {0,0,0};
-    private int cityPosition = 0;
-    private int kindPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_site_restaurant);
 
-        init();
+        mDropDownMenu= (DropDownMenu) findViewById( R.id.dropDownMenu);
+        initView();
     }
+
+    private void initView() {
+        View contentView = getLayoutInflater().inflate(R.layout.activity_site_contentview, null);
+        mDropDownMenu.setDropDownMenu(Arrays.asList(headers), initViewData(), contentView);
+        //init();
+        //该监听回调只监听默认类型，如果是自定义view请自行设置，参照demo
+        mDropDownMenu.addMenuSelectListener(new DropDownMenu.OnDefultMenuSelectListener() {
+            @Override
+            public void onSelectDefaultMenu(int index, int pos, String clickstr) {
+                //index:点击的tab索引，pos：单项菜单中点击的位置索引，clickstr：点击位置的字符串
+                Toast.makeText(getBaseContext(), clickstr, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     public void init()
     {
@@ -63,6 +87,69 @@ public class SiteRestaurantActivity extends AppCompatActivity {
 //        rb.setRating(val);
 
         linearLayout1.addView(view);
+    }
+
+    private List<HashMap<String, Object>> initViewData() {
+        List<HashMap<String, Object>> viewDatas = new ArrayList<>();
+        HashMap<String, Object> map1,map2,map3,map4;
+        map1 = new HashMap<String, Object>();
+        map2 = new HashMap<String, Object>();
+        map3 = new HashMap<String, Object>();
+        map4 = new HashMap<String, Object>();
+
+        map1.put(DropDownMenu.KEY, DropDownMenu.TYPE_GRID);
+        map1.put(DropDownMenu.VALUE, area);
+        viewDatas.add(map1);
+
+        map2.put(DropDownMenu.KEY, DropDownMenu.TYPE_LIST_SIMPLE);
+        map2.put(DropDownMenu.VALUE, ages);
+        viewDatas.add(map2);
+
+        map3.put(DropDownMenu.KEY, DropDownMenu.TYPE_LIST_SIMPLE);
+        map3.put(DropDownMenu.VALUE, kinds);
+        viewDatas.add(map3);
+
+        map4.put(DropDownMenu.KEY, DropDownMenu.TYPE_LIST_SIMPLE);
+        map4.put(DropDownMenu.VALUE, constellations);
+        viewDatas.add(map4);
+
+        /*for (int i = 0; i < headers.length; i++) {
+            map = new HashMap<String, Object>();
+            map.put(DropDownMenu.KEY, types[i]);
+            switch (types[i]) {
+                case DropDownMenu.TYPE_LIST_CITY:
+                    map.put(DropDownMenu.VALUE, constellations);
+                    //map.put(DropDownMenu.SELECT_POSITION,2);
+                    break;
+                case DropDownMenu.TYPE_LIST_SIMPLE:
+                    map.put(DropDownMenu.VALUE, ages);
+                    break;
+                case DropDownMenu.TYPE_GRID:
+                    map.put(DropDownMenu.VALUE, area);
+                    break;
+
+                default:
+                    map.put(DropDownMenu.VALUE, getCustomView());
+                    break;
+            }
+            viewDatas.add(map);
+        }*/
+        return viewDatas;
+    }
+
+    private View getCustomView() {
+        View v = getLayoutInflater().inflate(R.layout.activity_site_view, null);
+        return v;
+    }
+
+    @Override
+    public void onBackPressed() {
+        //退出activity前关闭菜单
+        if (mDropDownMenu.isShowing()) {
+            mDropDownMenu.closeMenu();
+        } else {
+            super.onBackPressed();
+        }
     }
 
 

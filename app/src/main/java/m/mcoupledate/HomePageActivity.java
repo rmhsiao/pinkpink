@@ -272,7 +272,7 @@ public class HomePageActivity extends AppCompatActivity
             startActivity(go2);
 
         } else if (id == R.id.nav_myTravle) {
-            Intent go2 = new Intent(HomePageActivity.this, SiteAttractionActivity.class);
+            Intent go2 = new Intent(HomePageActivity.this, AddNewRestaurantActivity.class);
             startActivity(go2);
 
         } else if (id == R.id.nav_travleEdit) {

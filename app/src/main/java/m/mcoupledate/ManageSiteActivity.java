@@ -1,11 +1,7 @@
 package m.mcoupledate;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.support.v7.app.AppCompatActivity;
 
 public class ManageSiteActivity extends AppCompatActivity {
 
@@ -14,12 +10,12 @@ public class ManageSiteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_site);
 
-        init();
+        //init();
     }
 
     public void init()
     {
-        String name = "HAHA";
+        /*String name = "HAHA";
         String date = "LOC";
         LinearLayout linearLayout1=(LinearLayout)findViewById(R.id.attraction_in_sv);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -37,6 +33,6 @@ public class ManageSiteActivity extends AppCompatActivity {
 //        RatingBar rb = (RatingBar)findViewById(R.id.ratingBar);
 //        rb.setRating(val);
 
-        linearLayout1.addView(view);
+        linearLayout1.addView(view);*/
     }
 }

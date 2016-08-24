@@ -18,14 +18,17 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class SiteAttractionActivity extends AppCompatActivity {
 
-    private String headers[] = {"行政區", "愛心指數"};
+public class MyRestaurantActivity extends AppCompatActivity {
+
+    private String headers[] = {"行政區", "時段", "種類", "口味"};
 
     DropDownMenu mDropDownMenu;
 
     public static String select_area = "";
-    public static String select_love = "";
+    public static String select_ages = "";
+    public static String select_kinds = "";
+    public static String select_constellations = "";
 
     // private m.mcoupledate.ListDropDownAdapter cityAdapter;
 
@@ -33,12 +36,15 @@ public class SiteAttractionActivity extends AppCompatActivity {
     private int[] types = new int[]{ DropDownMenu.TYPE_GRID , DropDownMenu.TYPE_LIST_CITY, DropDownMenu.TYPE_LIST_SIMPLE ,  DropDownMenu.TYPE_CUSTOM};
     private String area[] = {"不限", "楠梓區", "左營區", "鼓山區", "三民區", "鹽埕區", "前金區", "新興區", "苓雅區", "前鎮區", "旗津區", "小港區", "鳳山區", "大寮區", "鳥松區", "林園區", "仁武區", "大樹區", "大社區", "岡山區"
             , "路竹區", "橋頭區", "梓官區", "彌陀區", "永安區", "燕巢區", "田寮區", "阿蓮區", "茄萣區", "湖內區", "旗山區", "美濃區", "內門區", "杉林區", "甲仙區", "六龜區", "茂林區", "桃源區", "那瑪夏區"};
-    private String love[] = {"不限", "未滿1心", "1心以上", "2心以上", "3心以上", "4心以上","5心"};
+    private String ages[] = {"不限", "早餐", "午餐", "早午餐", "下午茶", "晚餐", "消夜"};
+    private String kinds[] = {"不限", "火烤", "吃到飽", "壽喜燒", "輕食", "晚餐", "素食", "速食", "海鮮", "手搖飲品", "咖啡廳", "小吃", "酒吧", "壽司", "火鍋", "排餐", "鐵板燒", "烘培", "熱炒", "甜點", "冰品", "拉麵", "炸物"};
+    private String constellations[] = {"不限", "美式", "歐陸", "南洋", "日式", "韓式", "中港台"};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_site_attraction);
+        setContentView(R.layout.activity_site_restaurant);
 
         mDropDownMenu= (DropDownMenu) findViewById( R.id.dropDownMenu);
         initView();
@@ -60,7 +66,13 @@ public class SiteAttractionActivity extends AppCompatActivity {
                         select_area = clickstr;
                         break;
                     case 1:
-                        select_love = clickstr;
+                        select_ages = clickstr;
+                        break;
+                    case 2:
+                        select_kinds = clickstr;
+                        break;
+                    case 3:
+                        select_constellations = clickstr;
                         break;
                 }
                 Toast.makeText(getBaseContext(), clickstr, Toast.LENGTH_SHORT).show();
@@ -71,17 +83,27 @@ public class SiteAttractionActivity extends AppCompatActivity {
     //設置篩選選單
     private List<HashMap<String, Object>> initViewData() {
         List<HashMap<String, Object>> viewDatas = new ArrayList<>();
-        HashMap<String, Object> map1,map2;
+        HashMap<String, Object> map1,map2,map3,map4;
         map1 = new HashMap<String, Object>();
         map2 = new HashMap<String, Object>();
+        map3 = new HashMap<String, Object>();
+        map4 = new HashMap<String, Object>();
 
         map1.put(DropDownMenu.KEY, DropDownMenu.TYPE_GRID);
         map1.put(DropDownMenu.VALUE, area);
         viewDatas.add(map1);
 
         map2.put(DropDownMenu.KEY, DropDownMenu.TYPE_LIST_SIMPLE);
-        map2.put(DropDownMenu.VALUE, love);
+        map2.put(DropDownMenu.VALUE, ages);
         viewDatas.add(map2);
+
+        map3.put(DropDownMenu.KEY, DropDownMenu.TYPE_LIST_SIMPLE);
+        map3.put(DropDownMenu.VALUE, kinds);
+        viewDatas.add(map3);
+
+        map4.put(DropDownMenu.KEY, DropDownMenu.TYPE_LIST_SIMPLE);
+        map4.put(DropDownMenu.VALUE, constellations);
+        viewDatas.add(map4);
 
         return viewDatas;
     }
@@ -135,7 +157,7 @@ public class SiteAttractionActivity extends AppCompatActivity {
             }
 
             if(!msg.equals("")) {
-                Toast.makeText(SiteAttractionActivity.this, msg, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyRestaurantActivity.this, msg, Toast.LENGTH_SHORT).show();
             }
             return true;
         }

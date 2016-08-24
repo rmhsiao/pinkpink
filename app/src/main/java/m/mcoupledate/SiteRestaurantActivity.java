@@ -22,14 +22,13 @@ import java.util.List;
 public class SiteRestaurantActivity extends AppCompatActivity {
 
     private String headers[] = {"行政區", "時段", "種類", "口味"};
-    private List<View> popupViews = new ArrayList<>();
 
     DropDownMenu mDropDownMenu;
 
-    public static final int TYPE_LIST_CITY = 1;
-    public static final int TYPE_LIST_SIMPLE = 2;
-    public static final int TYPE_GRID = 3;
-    public static final int TYPE_CUSTOM = 4;
+    public static String select_area = "";
+    public static String select_ages = "";
+    public static String select_kinds = "";
+    public static String select_constellations = "";
 
    // private m.mcoupledate.ListDropDownAdapter cityAdapter;
 
@@ -54,41 +53,34 @@ public class SiteRestaurantActivity extends AppCompatActivity {
     private void initView() {
         View contentView = getLayoutInflater().inflate(R.layout.activity_site_contentview, null);
         mDropDownMenu.setDropDownMenu(Arrays.asList(headers), initViewData(), contentView);
-        //init();
+        init();
         //该监听回调只监听默认类型，如果是自定义view请自行设置，参照demo
         mDropDownMenu.addMenuSelectListener(new DropDownMenu.OnDefultMenuSelectListener() {
             @Override
             public void onSelectDefaultMenu(int index, int pos, String clickstr) {
+                String end = null;
                 //index:点击的tab索引，pos：单项菜单中点击的位置索引，clickstr：点击位置的字符串
+                switch( index )  /*status 只能為整數、長整數或字元變數.*/
+                {
+                    case 0:
+                        select_area = clickstr;
+                        break;
+                    case 1:
+                        select_ages = clickstr;
+                        break;
+                    case 2:
+                        select_kinds = clickstr;
+                        break;
+                    case 3:
+                        select_constellations = clickstr;
+                        break;
+                }
                 Toast.makeText(getBaseContext(), clickstr, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-
-    public void init()
-    {
-        String name = "HAHA";
-        String date = "LOC";
-        LinearLayout linearLayout1=(LinearLayout)findViewById(R.id.attractionL);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        View view = LayoutInflater.from(this).inflate(R.layout.attraction_init, null);
-        view.setLayoutParams(lp);
-//圖片
-//      ImageView imageView1 = (ImageView) findViewById( R.id.attraction_image);
-
-        TextView tv1 = (TextView) view.findViewById(R.id.title);
-        TextView tv2 = (TextView) view.findViewById(R.id.location);
-        tv1.setText(name);
-        tv2.setText(date);
-//RatingBar抓分數
-//        float val = Float.parseFloat("4");
-//        RatingBar rb = (RatingBar)findViewById(R.id.ratingBar);
-//        rb.setRating(val);
-
-        linearLayout1.addView(view);
-    }
-
+    //設置篩選選單
     private List<HashMap<String, Object>> initViewData() {
         List<HashMap<String, Object>> viewDatas = new ArrayList<>();
         HashMap<String, Object> map1,map2,map3,map4;
@@ -113,33 +105,31 @@ public class SiteRestaurantActivity extends AppCompatActivity {
         map4.put(DropDownMenu.VALUE, constellations);
         viewDatas.add(map4);
 
-        /*for (int i = 0; i < headers.length; i++) {
-            map = new HashMap<String, Object>();
-            map.put(DropDownMenu.KEY, types[i]);
-            switch (types[i]) {
-                case DropDownMenu.TYPE_LIST_CITY:
-                    map.put(DropDownMenu.VALUE, constellations);
-                    //map.put(DropDownMenu.SELECT_POSITION,2);
-                    break;
-                case DropDownMenu.TYPE_LIST_SIMPLE:
-                    map.put(DropDownMenu.VALUE, ages);
-                    break;
-                case DropDownMenu.TYPE_GRID:
-                    map.put(DropDownMenu.VALUE, area);
-                    break;
-
-                default:
-                    map.put(DropDownMenu.VALUE, getCustomView());
-                    break;
-            }
-            viewDatas.add(map);
-        }*/
         return viewDatas;
     }
 
-    private View getCustomView() {
-        View v = getLayoutInflater().inflate(R.layout.activity_site_view, null);
-        return v;
+    //動態抓取
+    public void init()
+    {
+        String name = "HAHA";
+        String date = "LOC";
+        LinearLayout linearLayout1=(LinearLayout)findViewById(R.id.site_info);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        View view = LayoutInflater.from(this).inflate(R.layout.attraction_init, null);
+        view.setLayoutParams(lp);
+//圖片
+//      ImageView imageView1 = (ImageView) findViewById( R.id.attraction_image);
+
+        TextView tv1 = (TextView) view.findViewById(R.id.title);
+        TextView tv2 = (TextView) view.findViewById(R.id.location);
+        tv1.setText(name);
+        tv2.setText(date);
+//RatingBar抓分數
+//        float val = Float.parseFloat("4");
+//        RatingBar rb = (RatingBar)findViewById(R.id.ratingBar);
+//        rb.setRating(val);
+
+        linearLayout1.addView(view);
     }
 
     @Override
@@ -152,7 +142,7 @@ public class SiteRestaurantActivity extends AppCompatActivity {
         }
     }
 
-
+    //設置搜尋按鈕
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.site_search, menu);

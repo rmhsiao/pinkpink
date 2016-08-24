@@ -34,8 +34,8 @@ public class HomePageActivity extends AppCompatActivity
 
     private String conAPI = "http://140.117.71.216/pinkCon/";
 
-    private String id = MainActivity.getUserId();
-    //private String id = "1763438647274913";
+    //private String id = MainActivity.getUserId();
+    private String id = "1763438647274913";
     private SQLiteDatabase db = null;
 
     //此TextView是靜態新增的
@@ -272,7 +272,7 @@ public class HomePageActivity extends AppCompatActivity
             startActivity(go2);
 
         } else if (id == R.id.nav_myTravle) {
-            Intent go2 = new Intent(HomePageActivity.this, AddNewRestaurantActivity.class);
+            Intent go2 = new Intent(HomePageActivity.this, SiteAttractionActivity.class);
             startActivity(go2);
 
         } else if (id == R.id.nav_travleEdit) {
@@ -281,6 +281,12 @@ public class HomePageActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_logout) {
             Intent go2 = new Intent(HomePageActivity.this, SiteRestaurantActivity.class);
+            startActivity(go2);
+        } else if (id == R.id.my_attraction) {
+            Intent go2 = new Intent(HomePageActivity.this, MyAttractionActivity.class);
+            startActivity(go2);
+        } else if (id == R.id.my_restaurant) {
+            Intent go2 = new Intent(HomePageActivity.this, MyRestaurantActivity.class);
             startActivity(go2);
         }
 

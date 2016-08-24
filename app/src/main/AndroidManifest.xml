@@ -45,7 +45,9 @@
         <activity android:name=".MapActivity" />
         <activity android:name=".AddNewSiteActivity" />
         <activity android:name=".AddNewAttractionActivity" />
-        <activity android:name=".AddNewRestaurantActivity"></activity>
+        <activity android:name=".AddNewRestaurantActivity" />
+        <activity android:name=".MyAttractionActivity" />
+        <activity android:name=".MyRestaurantActivity"></activity>
     </application>
 
 </manifest>

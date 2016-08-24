@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class SiteAttractionActivity extends AppCompatActivity {
+public class MyAttractionActivity extends AppCompatActivity {
 
     private String headers[] = {"行政區", "愛心指數"};
 
@@ -135,7 +135,7 @@ public class SiteAttractionActivity extends AppCompatActivity {
             }
 
             if(!msg.equals("")) {
-                Toast.makeText(SiteAttractionActivity.this, msg, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyAttractionActivity.this, msg, Toast.LENGTH_SHORT).show();
             }
             return true;
         }

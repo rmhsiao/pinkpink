@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
+    <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="@string/google_maps_key" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -38,16 +42,22 @@
             android:name=".MemberData"
             android:label="@string/title_activity_member_data"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".SiteActivity" />
+        <activity android:name=".SiteInfoActivity" />
         <activity android:name=".ManageSiteActivity" />
         <activity android:name=".SiteRestaurantActivity" />
-        <activity android:name=".SiteAttractionActivity" />
-        <activity android:name=".MapActivity" />
+        <activity
+            android:name=".SiteAttractionActivity"
+            android:label="@string/title_activity_home_page"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".AddNewSiteActivity" />
         <activity android:name=".AddNewAttractionActivity" />
         <activity android:name=".AddNewRestaurantActivity" />
         <activity android:name=".MyAttractionActivity" />
-        <activity android:name=".MyRestaurantActivity"></activity>
+        <activity android:name=".MyRestaurantActivity" />
+        <activity
+            android:name=".SiteActivity"
+            android:label="@string/title_activity_site"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

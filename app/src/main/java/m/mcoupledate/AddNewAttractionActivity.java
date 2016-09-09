@@ -19,6 +19,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -63,7 +64,6 @@ import java.util.Map;
 
 import m.mcoupledate.classes.ClusterSite;
 import m.mcoupledate.classes.ClusterSiteRenderer;
-import m.mcoupledate.R;
 
 public class AddNewAttractionActivity extends AppCompatActivity implements
         OnMapReadyCallback,
@@ -116,13 +116,14 @@ public class AddNewAttractionActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_new_site);
+        setContentView(R.layout.activity_add_new_attraction);
 
         pref = this.getSharedPreferences("pinkpink", 0);
         prefEditor = pref.edit();
 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+
         mapFragment.getMapAsync(this);
 
         mQueue = Volley.newRequestQueue(this);
@@ -427,7 +428,7 @@ public class AddNewAttractionActivity extends AppCompatActivity implements
 
         mClusterManager.setRenderer(new ClusterSiteRenderer(AddNewAttractionActivity.this, mMap, mClusterManager));
 
-        mMap.setOnCameraChangeListener(mClusterManager);
+//        mMap.setOnCameraChangeListener(mClusterManager);
         mMap.setOnMarkerClickListener(mClusterManager);
         //mMap.setOnInfoWindowClickListener(mClusterManager); //  當點擊資訊視窗時引發事件
 

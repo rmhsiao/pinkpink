@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="m.mcoupledate.HomePageActivity">
+    tools:context="m.mcoupledate.SiteActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
         android:id="@+id/dropDownMenu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50sp"
+        android:layout_marginTop="60sp"
         app:ddmaskColor="@color/mask_color"
         app:ddmenuBackgroundColor="@color/white"
         app:ddmenuMaxHeight="280dp"

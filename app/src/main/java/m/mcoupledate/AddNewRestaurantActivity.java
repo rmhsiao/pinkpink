@@ -427,7 +427,7 @@ public class AddNewRestaurantActivity extends AppCompatActivity implements
 
         mClusterManager.setRenderer(new ClusterSiteRenderer(AddNewRestaurantActivity.this, mMap, mClusterManager));
 
-        mMap.setOnCameraChangeListener(mClusterManager);
+//        mMap.setOnCameraChangeListener(mClusterManager);
         mMap.setOnMarkerClickListener(mClusterManager);
         //mMap.setOnInfoWindowClickListener(mClusterManager); //  當點擊資訊視窗時引發事件
 

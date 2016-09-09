@@ -1,6 +1,13 @@
 package m.mcoupledate;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -11,6 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnMenuTabClickListener;
 import com.zxl.library.DropDownMenu;
 
 import java.util.ArrayList;
@@ -18,11 +27,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class SiteAttractionActivity extends AppCompatActivity {
-
+public class SiteAttractionActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
     private String headers[] = {"行政區", "愛心指數"};
 
     DropDownMenu mDropDownMenu;
+    private BottomBar mBottomBar;
 
     public static String select_area = "";
     public static String select_love = "";
@@ -39,6 +49,52 @@ public class SiteAttractionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_site_attraction);
+
+        mBottomBar = BottomBar.attach(this, savedInstanceState);
+        mBottomBar.setItems(R.menu.bottom_menu);
+        mBottomBar.selectTabAtPosition(1,true);
+        mBottomBar.setOnMenuTabClickListener(new OnMenuTabClickListener() {
+            @Override
+            public void onMenuTabSelected(@IdRes int menuItemId) {
+                //单击事件 menuItemId 是 R.menu.bottombar_menu 中 item 的 id
+                switch (menuItemId) {
+                    case R.id.bb_menu_memorialday:
+                        Intent go2 = new Intent(SiteAttractionActivity.this, HomePageActivity.class);
+                        startActivity(go2);
+                        break;
+                    case R.id.bb_menu_site:
+                        break;
+                    case R.id.bb_menu_trip:
+                        Toast.makeText(SiteAttractionActivity.this, "敬請期待", Toast.LENGTH_LONG).show();
+                        mBottomBar.selectTabAtPosition(1,true);
+                        break;
+                }
+            }
+
+            @Override
+            public void onMenuTabReSelected(@IdRes int menuItemId) {
+                //重选事件，当前已经选择了这个，又点了这个tab。微博点击首页刷新页面
+            }
+        });
+
+        // 当点击不同按钮的时候，设置不同的颜色
+        // 可以用以下三种方式来设置颜色.
+        mBottomBar.mapColorForTab(0, 0xFF5D4037);
+        mBottomBar.mapColorForTab(1, ContextCompat.getColor(this, R.color.colorAccent));
+        mBottomBar.mapColorForTab(2, "#7B1FA2");
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         mDropDownMenu= (DropDownMenu) findViewById( R.id.dropDownMenu);
         initView();
@@ -112,32 +168,78 @@ public class SiteAttractionActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //退出activity前关闭菜单
-        if (mDropDownMenu.isShowing()) {
-            mDropDownMenu.closeMenu();
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
     }
 
-    //設置搜尋按鈕
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.site_search, menu);
+        getMenuInflater().inflate(R.menu.home_page, menu);
         return true;
     }
 
-    private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
-        @Override
-        public boolean onMenuItemClick(MenuItem menuItem) {
-            String msg = "";
-            switch (menuItem.getItemId()) {
-            }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
-            if(!msg.equals("")) {
-                Toast.makeText(SiteAttractionActivity.this, msg, Toast.LENGTH_SHORT).show();
-            }
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
             return true;
         }
-    };
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_memberData) {
+            // 設定從這個活動跳至 home 的活動
+            Intent intent = new Intent(SiteAttractionActivity.this, MemberData.class);
+            // 開始跳頁
+            startActivity(intent);
+        } else if (id == R.id.nav_memorialDay) {
+            // 設定從這個活動跳至 home 的活動
+            Intent intent = new Intent(SiteAttractionActivity.this, ModifyMemorialDay.class);
+            // 開始跳頁
+            startActivity(intent);
+
+        } else if (id == R.id.nav_myViewpoint) {
+            Intent go2 = new Intent(SiteAttractionActivity.this, ManageSiteActivity.class);
+            startActivity(go2);
+
+        } else if (id == R.id.nav_myTravle) {
+            Intent go2 = new Intent(SiteAttractionActivity.this, SiteAttractionActivity.class);
+            startActivity(go2);
+
+        } else if (id == R.id.nav_travleEdit) {
+            Intent go2 = new Intent(SiteAttractionActivity.this, SiteInfoActivity.class);
+            startActivity(go2);
+
+        } else if (id == R.id.nav_logout) {
+            Intent go2 = new Intent(SiteAttractionActivity.this, SiteRestaurantActivity.class);
+            startActivity(go2);
+        } else if (id == R.id.my_attraction) {
+            Intent go2 = new Intent(SiteAttractionActivity.this, MyAttractionActivity.class);
+            startActivity(go2);
+        } else if (id == R.id.my_restaurant) {
+            Intent go2 = new Intent(SiteAttractionActivity.this, MyRestaurantActivity.class);
+            startActivity(go2);
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }

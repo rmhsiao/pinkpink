@@ -88,12 +88,12 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="edit"
-            android:id="@+id/button2" />
+            android:id="@+id/edit_button" />
 
         <Button
             android:layout_width="43dp"
             android:layout_height="wrap_content"
             android:text="delete"
-            android:id="@+id/button3" />
+            android:id="@+id/delete_button" />
     </LinearLayout>
 </LinearLayout>

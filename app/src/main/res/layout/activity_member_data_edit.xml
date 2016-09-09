@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <ImageView
+            android:layout_width="53dp"
+            android:layout_height="53dp"
+            android:src="@drawable/couple"
+            android:layout_gravity="bottom" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="1"
+            android:layout_marginLeft="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:id="@+id/textView3"
+                android:layout_marginTop="40dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/username"
+                android:hint="Name"
+                android:gravity="center"
+                android:maxLength="16"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_weight="0.48"
+                android:layout_gravity="bottom" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+
+        <ImageView
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:src="@drawable/calendar"
+            android:layout_gravity="bottom" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MermorialDay"
+                android:id="@+id/textView"
+                android:layout_marginTop="30dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:inputType="date"
+                    android:ems="10"
+                    android:hint="Year"
+                    android:gravity="center"
+                    android:digits="1234567890"
+                    android:id="@+id/r_year"
+                    android:layout_gravity="bottom" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:inputType="date"
+                    android:ems="10"
+                    android:hint="Month"
+                    android:gravity="center"
+                    android:digits="1234567890"
+                    android:id="@+id/r_month"
+                    android:layout_gravity="bottom" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:inputType="date"
+                    android:ems="10"
+                    android:hint="Day"
+                    android:gravity="center"
+                    android:digits="1234567890"
+                    android:id="@+id/r_day"
+                    android:layout_gravity="bottom" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

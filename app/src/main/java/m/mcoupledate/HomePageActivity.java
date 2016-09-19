@@ -175,7 +175,7 @@ public class HomePageActivity extends AppCompatActivity
                 }
                 else if(Integer.valueOf(theDay.substring(5, 7)) < Integer.valueOf(today.substring(5, 7))){//月小於  年+1
                     try{
-                        String d1_str = (Integer.valueOf(today.substring(0, 4) + 1)) + "-" + theDay.substring(5, 7) + "-" + theDay.substring(8, 10);
+                        String d1_str = (Integer.valueOf(today.substring(0, 4)) + 1) + "-" + theDay.substring(5, 7) + "-" + theDay.substring(8, 10);
                         d1 = dateFormatter.parse(d1_str);
                     }
                     catch (ParseException e){
@@ -187,7 +187,7 @@ public class HomePageActivity extends AppCompatActivity
                 }
                 else if(Integer.valueOf(theDay.substring(5, 7)) == Integer.valueOf(today.substring(5, 7)) && Integer.valueOf(theDay.substring(8, 10)) < Integer.valueOf(today.substring(8, 10))){//月等於 日小於  年+1
                     try{
-                        String d1_str = (Integer.valueOf(today.substring(0, 4) + 1)) + "-" + theDay.substring(5, 7) + "-" + theDay.substring(8, 10);
+                        String d1_str = (Integer.valueOf(today.substring(0, 4)) + 1) + "-" + theDay.substring(5, 7) + "-" + theDay.substring(8, 10);
                         d1 = dateFormatter.parse(d1_str);
                     }
                     catch (ParseException e){
@@ -276,7 +276,7 @@ public class HomePageActivity extends AppCompatActivity
             startActivity(go2);
 
         } else if (id == R.id.nav_travleEdit) {
-            Intent go2 = new Intent(HomePageActivity.this, SiteActivity.class);
+            Intent go2 = new Intent(HomePageActivity.this, SiteInfo.class);
             startActivity(go2);
 
         } else if (id == R.id.nav_logout) {

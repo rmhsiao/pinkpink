@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -106,7 +105,7 @@ public class AddNewSiteActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_new_site);
+        setContentView(R.layout.add_new_site);
 
         //  從SESSION取得使用者mId
         pref = this.getSharedPreferences("pinkpink", 0);
@@ -257,8 +256,8 @@ public class AddNewSiteActivity extends AppCompatActivity implements
             @Override
             public void onResult(Object result)
             {
-                Location location = (Location) result;
-                markClusterSites(new LatLng(location.getLatitude(), location.getLongitude()));
+//                Location location = (Location) result;
+//                markClusterSites(new LatLng(location.getLatitude(), location.getLongitude()));
             }
         };
         mapChecker.checkMapMyLocation(mMap);

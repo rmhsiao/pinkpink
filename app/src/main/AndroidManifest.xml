@@ -5,49 +5,73 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <!-- 調用內部電話 -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:screenOrientation="portrait">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            android:screenOrientation="portrait"
         </activity>
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
+            android:value="@string/facebook_app_id"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".ModifyMemorialDay" />
+        <activity android:name=".ModifyMemorialDay"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".HomePageActivity"
             android:label="@string/title_activity_home_page"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MemberData"
             android:label="@string/title_activity_member_data"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".SiteActivity" />
-        <activity android:name=".ManageSiteActivity" />
-        <activity android:name=".SiteRestaurantActivity" />
-        <activity android:name=".SiteAttractionActivity" />
-        <activity android:name=".MapActivity" />
-        <activity android:name=".AddNewSiteActivity" />
-        <activity android:name=".AddNewAttractionActivity" />
-        <activity android:name=".AddNewRestaurantActivity" />
-        <activity android:name=".MyAttractionActivity" />
-        <activity android:name=".MyRestaurantActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SiteActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".SiteInfo"
+            android:label="景點"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ManageSiteActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".SiteRestaurantActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".SiteAttractionActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".AddNewSiteActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".MyAttractionActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".MyRestaurantActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
